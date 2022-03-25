@@ -1,0 +1,12 @@
+
+/Users/johntoro/Documents/CP/CodeForce/Contest/EducationalRound112_div2/C.cpp:48:13: error: invalid operands to binary expression ('ll [n]' and 'int')
+        sum += a[i];
+        ~~~ ^  ~~~~
+/Users/johntoro/Documents/CP/CodeForce/Contest/EducationalRound112_div2/C.cpp:69:9: warning: 'auto' type specifier is a C++11 extension [-Wc++11-extensions]
+    for(auto i : v){
+        ^
+/Users/johntoro/Documents/CP/CodeForce/Contest/EducationalRound112_div2/C.cpp:69:16: warning: range-based for loop is a C++11 extension [-Wc++11-extensions]
+    for(auto i : v){
+               ^
+2 warnings and 1 error generated.
+

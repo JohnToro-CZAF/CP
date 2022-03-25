@@ -1,0 +1,5 @@
+[
+	{
+		"test": "5 10\npersist\nunion 1 2\nunion 3 4\npersist\nunion 1 4\nunion 2 3\nrollback\nunion 4 5\nrollback\nunion 1 5\n"
+	}
+]

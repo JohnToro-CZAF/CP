@@ -1,0 +1,15 @@
+[
+	{
+		"correct_answers":
+		[
+			"baba\naaaaaa\n-1"
+		],
+		"test": "3\nbaba\nba\naa\naaa\naba\nab\n"
+	},
+	{
+		"test": "1\nbbbb\nbbb\n"
+	},
+	{
+		"test": "1\naaaaaaa\naaaa\n"
+	}
+]
