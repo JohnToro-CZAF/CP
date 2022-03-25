@@ -49,9 +49,48 @@ const int maxn = 1e5 + 5;
 const ll MOD = 1e9 + 7; // 998244353
 const ll INF = 1e9;
 const char min_char = 'a';
-void solve(){
 
+vvi adj;
+vi ans;
+vi co;
+
+void dfs(int s, int color, int p){
+    // cout << s << endl;
+    co[s] = color;
+    if(adj[s].size() == 1 && s != 0){
+        return;
+    }
+    for(auto u : adj[s]){
+        if(u != p){
+            dfs(u, color^1, s);
+        }
+    }
+    return;
 }
+
+void solve(){
+    int n; cin >> n;
+    adj = vvi(n, vi());
+    ans = vi(n, 0);
+    co = vi(n, 0);
+    forn(i, n-1){
+        int x, y;
+        cin >> x >> y;
+        x--; y--;
+        adj[x].push_back(y);
+        adj[y].push_back(x);
+    }
+    dfs(0, 0, -1);
+    forn(i, n){
+        // cout << co[i] << " "; 
+    }
+    // cout << endl;
+    for(int i = 0; i < n; i++){
+        int mul = (co[i] == 0) ? 1 : -1;
+        cout << mul*((int)adj[i].size()) << " ";
+    }
+    cout << endl;
+}   
 
 int main(){
     ios::sync_with_stdio(false);
