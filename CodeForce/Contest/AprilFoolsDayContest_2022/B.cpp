@@ -46,20 +46,88 @@ template<typename T>
 inline T findLessPower(T base, T n){if(n==1){return 0;} T temp = log(n)/log(base); if(power(base, temp) == n){return temp-1;}else{return temp;}}
 
 const int maxn = 1e5 + 5;
-const ll MOD = 1e9 + 7; // 998244353
+const ll MOD = 341550071728321; // 998244353
 const ll INF = 1e9;
 const char min_char = 'a';
-void solve(){
 
+vector<int> parent, siz, mi;
+void make_set(int v) {
+    parent[v] = v;
+    siz[v] = 1;
+    mi[v] = v;
+}
+
+int find_set(int v) {
+    if (v == parent[v])
+        return v;
+    return parent[v] = find_set(parent[v]);
+}
+
+void union_sets(int a, int b) {
+    a = find_set(a);
+    b = find_set(b);
+    if (a != b) {
+        mi[a] = min(mi[a], mi[b]);
+        mi[b] = min(mi[a], mi[b]);
+        if(siz[a] > siz[b]){
+            parent[b] = a;
+            siz[a] += siz[b];
+        } else {
+            parent[a] = b;
+            siz[b] += siz[a];
+        }
+    } else{
+        return;
+    }
+}
+
+void solve(){
+    int d, n;
+    cin >> d >> n;
+    map<set<pair<pii, int> >, vi> check;
+    map<int, set<pair<pii, int> > > su;
+    forn(i, d){
+        parent = vi(n);
+        siz = vi(n);
+        mi = vi(n);
+        vector<pair<int, pii> > edges;
+        forn(i, n){
+            make_set(i);
+        }
+        forn(i, n-1){
+            int a, b, c;
+            cin >> a >> b >> c;
+            a--; b--; 
+            edges.push_back(make_pair(c, make_pair(a, b)));
+        }
+        sort(all(edges));
+        set<pair<pii, int> > s;
+        for(int i = int(edges.size())-1; i >= 0; i--){
+            int cur = edges[i].first;
+            int a = edges[i].second.first;
+            int b = edges[i].second.second;
+            int cura = mi[find_set(a)]; int curb = mi[find_set(b)];
+            if(cura > curb){
+                swap(cura, curb);
+            }
+            s.insert(make_pair(make_pair(cura, curb), cur));
+            union_sets(a, b);
+            // cout << cura << " " << curb << " " << cur << endl;
+        }
+        for(auto u : s){
+            // cout << u.first.first << " " << u.first.second << " " << u.second << endl;
+        }
+        check[s].push_back(i+1);
+        su[i] = s;
+    }
+    forn(i, d){
+        cout << check[su[i]][0] << " ";
+    }
+    cout << endl;
 }
 
 int main(){
     ios::sync_with_stdio(false);
     cin.tie(0);
-    int c;
-    cin >> c;
-    while(c--){
-        solve();
-    }
+    solve();
 }
-

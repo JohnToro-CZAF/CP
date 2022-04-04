@@ -50,13 +50,16 @@ const ll MOD = 1e9 + 7; // 998244353
 const ll INF = 1e9;
 const char min_char = 'a';
 void solve(){
-    cout << "red panda" << endl;
+
 }
 
 int main(){
     ios::sync_with_stdio(false);
     cin.tie(0);
-    cout.tie(0);
-    solve();
+    int c;
+    cin >> c;
+    while(c--){
+        solve();
+    }
 }
 

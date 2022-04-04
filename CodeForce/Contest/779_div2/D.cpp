@@ -50,13 +50,63 @@ const ll MOD = 1e9 + 7; // 998244353
 const ll INF = 1e9;
 const char min_char = 'a';
 void solve(){
-    cout << "red panda" << endl;
+    int l, r;
+    cin >> l >> r;
+    int n = r-l+1;
+    int count0[18][2];
+    int count1[18][2];
+    vi a(n);
+    mem(count0, 0);
+    mem(count1, 0);
+    for(int i = l; i <= r; i++){
+        for(int j = 0; j < 18; j++){
+            count0[j][0] += ((i>>j)%2 == 0);
+            count1[j][0] += ((i>>j)%2 == 1);
+        }
+    }
+    forn(i, n){
+        cin >> a[i];
+        for(int j = 0; j < 18; j++){
+            count0[j][1] += ((a[i]>>j)%2 == 0);
+            count1[j][1] += ((a[i]>>j)%2 == 1);
+        }
+    }
+    vi ans(18, 0);
+    vi ch(18, 0);
+    bool chk = false;
+    for(int i = 0; i < 18; i++){
+        if(count0[i][0] == count1[i][0]){
+            ch[i] = 1;
+            chk = true;
+        } else {
+            if(count0[i][0] != count0[i][1]){ans[i] = 1;}
+            else ans[i] = 0;
+        }
+    }
+    if(chk){
+        int mid = r - (r-l+1)/2;
+        for(int j = 0; j < 18; j++){
+            if(ch[j]){
+                ans[j] = (mid>>j)%2;
+            }
+        }
+    }
+    int x = 0;
+    forn(i, 18){
+        if(ans[i] != 0){
+            x += power(2, i);
+        }
+    }
+    cout << x << endl;
 }
 
 int main(){
     ios::sync_with_stdio(false);
     cin.tie(0);
-    cout.tie(0);
-    solve();
+    int c;
+    cin >> c;
+    while(c--){
+        solve();
+    }
 }
 

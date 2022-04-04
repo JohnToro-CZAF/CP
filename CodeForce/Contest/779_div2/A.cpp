@@ -50,13 +50,37 @@ const ll MOD = 1e9 + 7; // 998244353
 const ll INF = 1e9;
 const char min_char = 'a';
 void solve(){
-    cout << "red panda" << endl;
+    int n; cin >> n;
+    string s;
+    cin >> s;
+    vi a(n);
+    forn(i, n){
+        a[i] = s[i]-'0';
+    }
+    vi pos;
+    forn(i, n){
+        if(a[i] == 0){
+            pos.push_back(i);
+        }
+    }
+    int cnt = 0;
+    for(int i = 0; i+1 < pos.size(); i++){
+        if(pos[i+1] - pos[i] == 1){
+            cnt+=2;
+        } else if(pos[i+1] - pos[i] == 2){
+            cnt++;
+        } 
+    }
+    cout << cnt << endl;
 }
 
 int main(){
     ios::sync_with_stdio(false);
     cin.tie(0);
-    cout.tie(0);
-    solve();
+    int c;
+    cin >> c;
+    while(c--){
+        solve();
+    }
 }
 

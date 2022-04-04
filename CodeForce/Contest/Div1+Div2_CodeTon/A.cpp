@@ -50,7 +50,77 @@ const ll MOD = 1e9 + 7; // 998244353
 const ll INF = 1e9;
 const char min_char = 'a';
 void solve(){
-    
+    int n; cin >> n;
+    vi a(n);
+    vi pos;
+    forn(i, n){
+        cin >> a[i];
+    }
+    pos.push_back(-1);
+    forn(i, n){
+        if(a[i] == 0){
+            pos.push_back(i);
+        }
+    }
+    pos.push_back(n);
+    int m = 0;
+    pii best = make_pair(0, n);
+    // for(auto u : pos){
+    //     cout << u << " ";
+    // }
+    // cout << "case" << endl;
+    for(int i = 0; i+1 < pos.size(); i++){
+        int cnt1 = 0, cnt11 = 0;
+        int cnt2 = 0, cnt22 = 0;
+        int last = -1;
+        int first = -1;
+        for(int j = pos[i]+1; j < pos[i+1]; j++){
+            if(a[j] < 0 && first == -1){
+                first = j;
+            }
+            if(a[j] < 0){
+                last = j;
+            }
+            if(a[j] == -2){
+                cnt22++;
+            } else if(a[j] == 2){
+                cnt2++;
+            } else if(a[j] == 1){
+                cnt1++;
+            } else {
+                cnt11++;
+            }
+        }  
+        if((cnt11 + cnt22)%2 == 0){
+            if(cnt22+cnt2 > m){
+                best = make_pair(pos[i]+1, n-pos[i+1]);
+                m = cnt22+cnt2;
+            }
+        } else {
+            int cnt = 0;
+            for(int j = first+1; j < pos[i+1]; j++){
+                if(a[j] == 2 || a[j] == -2){
+                    cnt++;
+                }
+            }
+            if(cnt > m){
+                m = cnt;
+                best = make_pair(first+1, n-pos[i+1]);
+            }
+            cnt = 0;
+            for(int j = pos[i]+1; j < last; j++){
+                if(a[j] == 2 || a[j] == -2){
+                    cnt++;
+                }              
+            }
+            if(cnt > m){
+                m = cnt;
+                best = make_pair(pos[i]+1, n-last);
+            }      
+        }
+        // cout << best.first << " " << best.second << endl;
+    }
+    cout << best.first << " " << best.second << endl;
 }
 
 int main(){
