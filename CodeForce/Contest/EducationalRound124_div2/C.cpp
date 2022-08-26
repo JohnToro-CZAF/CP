@@ -50,7 +50,68 @@ const ll MOD = 1e9 + 7; // 998244353
 const ll INF = 1e9;
 const char min_char = 'a';
 void solve(){
+    int n;
+    cin >> n;
+    vi a(n), b(n);
+    forn(i, n){
+        cin >> a[i];
+    }
+    forn(i, n){
+        cin >> b[i];
+    }
+    ll ans = INF;
+    int fi = abs(a[0]-b[0])+abs(a[n-1]-b[n-1]);
+    int sec = abs(a[0]-b[n-1])+abs(b[0]-a[n-1]);
+    ans = min(fi, sec);
+    int indexb[2], indexa[2];
+    int mi = INF;
+    ll temp[4];
+    ll t = 0;
+    for(int i = 0; i < n; i++){
+        if(abs(a[i]-b[0]) < mi){
+            mi = abs(a[i]-b[0]);
+            indexb[0] = i;
+        }
+    }
+    temp[0] = mi;
+    mi = INF;
+    forn(i, n){
+        if(abs(a[i]-b[n-1]) < mi){
+            mi = abs(a[i]-b[n-1]);
+            indexb[1] = i;
+        }
+    }
+    temp[1] = mi;
+    mi = INF;
+    for(int i = 0; i < n; i++){
+        if(abs(b[i]-a[0]) < mi){
+            mi = abs(b[i]-a[0]);
+            indexa[0] = i;
+        }
+    }
+    temp[2] = mi;
+    mi = INF;
+    forn(i, n){
+        if(abs(b[i]-a[n-1]) < mi){
+            mi = abs(b[i]-a[n-1]);
+            indexb[1] = i;
+        }
+    }
+    temp[3] = mi;
+    if(0 == indexa[0]){
+        t += temp[0];
+        t += temp[1];
+        t += temp[3];
+    }
+    if(0 == indexa[1]){
+        t += temp[0];
+        t += temp[1];
+        t += temp[2];
+    }
 
+
+    ans = min(ans, t);
+    cout << ans << endl;
 }
 
 int main(){

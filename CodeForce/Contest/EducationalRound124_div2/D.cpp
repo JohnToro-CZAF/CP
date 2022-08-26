@@ -50,7 +50,26 @@ const ll MOD = 1e9 + 7; // 998244353
 const ll INF = 1e9;
 const char min_char = 'a';
 void solve(){
+    int n;
+    cin >> n;
+    vii v(n);
+    set<pii> s;
+    map<pii, int> marked;
+    map<pii, pii> ans;
+    map<pii, int> order;
 
+    forn(i, n){
+        cin >> v[i].first >> v[i].second;
+        marked[v[i]] = 1;
+        s.insert(v[i]);
+    }
+    int t = sqrt(n);
+    for(int i = 0; i <= t+n-t*t; i++){
+        if(s.size() == 0){
+            break;
+        }
+
+    }
 }
 
 int main(){

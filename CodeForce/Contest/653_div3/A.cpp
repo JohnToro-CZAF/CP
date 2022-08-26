@@ -52,7 +52,6 @@ ll gcd(ll x, ll y){
 ll lcm(ll x, ll y){
     return x*y/gcd(x, y);
 }
-
 void solve(){
     int n,x,y;
     cin >> x >> y >> n;

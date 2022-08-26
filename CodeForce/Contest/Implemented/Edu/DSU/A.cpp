@@ -51,10 +51,11 @@ const ll INF = 1e9;
 const char min_char = 'a';
 
 vector<int> parent, rang, siz, mi, mx;
-void make_set(int v) {
+void make_set(int v, int l, int r) {
     parent[v] = v;
     rang[v] = 0;
-    mi[v] = mx[v] = v;
+    mi[v] = l;
+    mx[v] = r;
     siz[v] = 1;
 }
 
@@ -83,22 +84,15 @@ void union_sets(int a, int b) {
 
 void solve(){
     int n, m;
-    cin >> n >> m;
+    cin >> n; m = 1e6;
     parent.resize(n);rang.resize(n);siz.resize(n); mi.resize(n); mx.resize(n);
-    forn(i, n){make_set(i);}
-    while(m--){
-        string order; cin >> order;
-        if(order == "union"){
-            int x, y; cin >> x >> y;
-            x--; y--;
-            if(find_set(x) != find_set(y)){
-                union_sets(x, y);
-            }
-        } else {
-            int x; cin >> x; x--;
-            int u = find_set(x);
-            cout << mi[u]+1 << " " << mx[u]+1 << " " << siz[u] << endl;
-        }
+    forn(i, n){
+        int x, y, z, w;
+        cin >> x >> y >> z >> w;
+        make_set(i, x, z);
+    }
+    forn(i, n){
+        
     }
 }
 
