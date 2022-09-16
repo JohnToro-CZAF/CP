@@ -13,7 +13,6 @@
 #include <queue>
 #include <random>
 #include <set>
-#include <stack>
 #include <vector>
 using namespace std;
 
@@ -50,68 +49,42 @@ const int maxn = 1e5 + 5;
 const ll MOD = 1e9 + 7; // 998244353
 const ll INF = 1e9;
 const char min_char = 'a';
-
-vector<int> parent, rang;
-
-void make_set(int v) {
-    parent[v] = v;
-    rang[v] = 0;
-}
-
-int find_set(int v) {
-    if (v == parent[v])
-        return v;
-    return parent[v] = find_set(parent[v]);
-}
-
-void union_sets(int a, int b) {
-    a = find_set(a);
-    b = find_set(b);
-    if (a != b) {
-        if (rang[a] < rang[b])
-            swap(a, b);
-        parent[b] = a;
-        if (rang[a] == rang[b])
-            rang[a]++;
-    } else{
-        return;
-    }
-}
-
 void solve(){
-    int n;
-    cin >> n;
-    parent.resize(2*n);
-    rang.resize(2*n);
-    forn(i, 2*n){
-        make_set(i);
-    }
-    string s;
-    cin >> s;
-    stack<pair<char, int> > st;
-    int t = 0;
-    while(t < 2*n){
-        if(st.empty()){
-            st.push(make_pair(s[t], t));
+    int n, m;
+    cin >> n >> m;
+    if(m % 4 == 1 || m % 4 == 3){
+        cout << "YES" <<endl;
+        for(int i = 0; i < n/2; i++){
+            cout << i*2+1 << " " << i*2 + 2 << endl;
+        }
+        return;
+    } else {
+        if(m % 4 == 0){
+            cout << "NO" << endl;
+            return;
         } else {
-            pair<char, int> p = st.top();
-            if(s[t] != p.first){
-                st.pop();
-                union_sets(p.second, t);
-                // cout << p.second+1 << " " << t+1 << endl;
+            if(n % 2 == 0){
+                cout << "YES" << endl;
+                for(int i = 0; i < n/4; i++){
+                    cout << 2*i+1 << " " << (i+1)*4 << endl;
+                }
+                vi v;
+                for(int i = n/4; i < n/2; i++){
+                    v.push_back(2*i+1);
+                }
+                int cnt = 0;
+                for(int i = 1; i <= n; i++){
+                    if(i % 4 == 2){
+                        cout << i << " " << v[cnt] << endl;
+                        cnt++;
+                    }
+                }
             } else {
-                st.push(make_pair(s[t], t));
+                cout << "NO" << endl;
+                return;
             }
         }
-        t++;
     }
-    set<int> si;
-    forn(i, 2*n){
-        int x = find_set(i);
-        si.insert(x);
-    }
-    int ans = si.size();
-    cout << ans << endl;
 }
 
 int main(){

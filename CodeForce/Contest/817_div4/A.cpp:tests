@@ -1,0 +1,11 @@
+[
+	{
+		"test": "10\n5\nTimur\n5\nmiurT\n5\nTrumi\n5\nmriTu\n5\ntimur\n4\nTimr\n6\nTimuur\n10\ncodeforces\n10\nTimurTimur\n5\nTIMUR\n"
+	},
+	{
+		"test": "1\n10\nTimurTimur\n"
+	},
+	{
+		"test": "1\n5\nTTmur\n"
+	}
+]

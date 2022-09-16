@@ -13,7 +13,6 @@
 #include <queue>
 #include <random>
 #include <set>
-#include <stack>
 #include <vector>
 using namespace std;
 
@@ -50,68 +49,52 @@ const int maxn = 1e5 + 5;
 const ll MOD = 1e9 + 7; // 998244353
 const ll INF = 1e9;
 const char min_char = 'a';
-
-vector<int> parent, rang;
-
-void make_set(int v) {
-    parent[v] = v;
-    rang[v] = 0;
-}
-
-int find_set(int v) {
-    if (v == parent[v])
-        return v;
-    return parent[v] = find_set(parent[v]);
-}
-
-void union_sets(int a, int b) {
-    a = find_set(a);
-    b = find_set(b);
-    if (a != b) {
-        if (rang[a] < rang[b])
-            swap(a, b);
-        parent[b] = a;
-        if (rang[a] == rang[b])
-            rang[a]++;
-    } else{
-        return;
-    }
-}
-
 void solve(){
-    int n;
-    cin >> n;
-    parent.resize(2*n);
-    rang.resize(2*n);
-    forn(i, 2*n){
-        make_set(i);
+    int n, q;
+    cin >> n >> q;
+    vi a(n);
+    for(int& x : a){cin >> x; x--;}
+    vi b = a;
+    reverse(all(b));
+    vector<vi> won = vvi(n, vi());
+    for(int i = 0; i < n; i++){
+        int s = b.size();
+        if(b[s-1] == n-1 || b[s-2] == n-1){
+            won[n-1].push_back(i+1);
+            continue;
+        }
+        if(b[s-1] > b[s-2]){
+            won[b[s-1]].push_back(i+1);
+            swap(b[s-1], b[s-2]);
+        } 
+        else {
+            won[b[s-2]].push_back(i+1);
+        }
+        b.pop_back();
     }
-    string s;
-    cin >> s;
-    stack<pair<char, int> > st;
-    int t = 0;
-    while(t < 2*n){
-        if(st.empty()){
-            st.push(make_pair(s[t], t));
+    while(q--){
+        int i, k; cin >> i >> k;
+        i--;
+        if(won[a[i]].size() == 0 || k < won[a[i]][0]){
+            cout << 0 << endl;
         } else {
-            pair<char, int> p = st.top();
-            if(s[t] != p.first){
-                st.pop();
-                union_sets(p.second, t);
-                // cout << p.second+1 << " " << t+1 << endl;
+            int idx;
+            auto it = lower_bound(all(won[a[i]]), k);
+            if(it == won[a[i]].end()){
+                idx = won[a[i]].size();
+                idx--;
+            } else {idx = it - won[a[i]].begin();}
+            if(a[i] == n-1){
+                cout << idx + 1 + max(k-n, 0) << endl;
             } else {
-                st.push(make_pair(s[t], t));
+                cout << idx + 1 << endl;
             }
         }
-        t++;
     }
-    set<int> si;
-    forn(i, 2*n){
-        int x = find_set(i);
-        si.insert(x);
-    }
-    int ans = si.size();
-    cout << ans << endl;
+
+    // vi v = {1, 3, 4, 6, 7};
+    // int idx = lower_bound(all(v), 1) - v.begin();
+    // cout << idx << endl;
 }
 
 int main(){

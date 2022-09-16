@@ -82,16 +82,6 @@ void solve(){
     cin >> n >> m;
     parent.resize(n);
     rang.resize(n);
-
-    forn(i, m){
-        int x, y, w;
-        cin >> x >> y >> w;
-        x--; y--;
-        Edge e;
-        e.u = x;
-        e.v = y;
-        e.weight = w; 
-    }
     
 }
 

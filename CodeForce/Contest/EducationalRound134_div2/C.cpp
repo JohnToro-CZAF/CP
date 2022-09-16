@@ -13,7 +13,6 @@
 #include <queue>
 #include <random>
 #include <set>
-#include <stack>
 #include <vector>
 using namespace std;
 
@@ -50,69 +49,35 @@ const int maxn = 1e5 + 5;
 const ll MOD = 1e9 + 7; // 998244353
 const ll INF = 1e9;
 const char min_char = 'a';
-
-vector<int> parent, rang;
-
-void make_set(int v) {
-    parent[v] = v;
-    rang[v] = 0;
-}
-
-int find_set(int v) {
-    if (v == parent[v])
-        return v;
-    return parent[v] = find_set(parent[v]);
-}
-
-void union_sets(int a, int b) {
-    a = find_set(a);
-    b = find_set(b);
-    if (a != b) {
-        if (rang[a] < rang[b])
-            swap(a, b);
-        parent[b] = a;
-        if (rang[a] == rang[b])
-            rang[a]++;
-    } else{
-        return;
-    }
-}
-
 void solve(){
     int n;
     cin >> n;
-    parent.resize(2*n);
-    rang.resize(2*n);
-    forn(i, 2*n){
-        make_set(i);
-    }
-    string s;
-    cin >> s;
-    stack<pair<char, int> > st;
-    int t = 0;
-    while(t < 2*n){
-        if(st.empty()){
-            st.push(make_pair(s[t], t));
-        } else {
-            pair<char, int> p = st.top();
-            if(s[t] != p.first){
-                st.pop();
-                union_sets(p.second, t);
-                // cout << p.second+1 << " " << t+1 << endl;
-            } else {
-                st.push(make_pair(s[t], t));
-            }
+    vi a(n), b(n);
+    for(int& x : a) cin >> x;
+    for(int& x : b) cin >> x;
+    int lst = n;
+    vi ansm(n, 0);
+    vi ansM(n, 0);
+    for(int i = n-1; i >= 0; i--){
+        int idx = lower_bound(all(b), a[i]) - b.begin();
+        ansm[i] = b[idx] - a[i];
+        int pos = lst-1;
+        if(idx == i){
+            // pointer to largest number that just moved out since
+            // it is the only "possible" number assign to that ith position
+            lst = idx;
         }
-        t++;
+        ansM[i] = b[pos] - a[i];
     }
-    set<int> si;
-    forn(i, 2*n){
-        int x = find_set(i);
-        si.insert(x);
+    forn(i, n){
+        cout << ansm[i] << " ";
     }
-    int ans = si.size();
-    cout << ans << endl;
-}
+    cout << endl;
+    forn(i, n){
+        cout << ansM[i] << " ";
+    }
+    cout << endl;
+} 
 
 int main(){
     ios::sync_with_stdio(false);

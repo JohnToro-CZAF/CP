@@ -13,7 +13,6 @@
 #include <queue>
 #include <random>
 #include <set>
-#include <stack>
 #include <vector>
 using namespace std;
 
@@ -49,69 +48,29 @@ inline T findLessPower(T base, T n){if(n==1){return 0;} T temp = log(n)/log(base
 const int maxn = 1e5 + 5;
 const ll MOD = 1e9 + 7; // 998244353
 const ll INF = 1e9;
+const ll N = 1005;
 const char min_char = 'a';
 
-vector<int> parent, rang;
-
-void make_set(int v) {
-    parent[v] = v;
-    rang[v] = 0;
-}
-
-int find_set(int v) {
-    if (v == parent[v])
-        return v;
-    return parent[v] = find_set(parent[v]);
-}
-
-void union_sets(int a, int b) {
-    a = find_set(a);
-    b = find_set(b);
-    if (a != b) {
-        if (rang[a] < rang[b])
-            swap(a, b);
-        parent[b] = a;
-        if (rang[a] == rang[b])
-            rang[a]++;
-    } else{
-        return;
-    }
-}
-
 void solve(){
-    int n;
-    cin >> n;
-    parent.resize(2*n);
-    rang.resize(2*n);
-    forn(i, 2*n){
-        make_set(i);
+    int n, q;
+    cin >> n >> q;
+    vector<vector<ll> > a(N, vector<ll>(N, 0));
+    forn(i, n){
+        ll x, y;
+        cin >> x >> y;
+        a[x][y] += x*y;
     }
-    string s;
-    cin >> s;
-    stack<pair<char, int> > st;
-    int t = 0;
-    while(t < 2*n){
-        if(st.empty()){
-            st.push(make_pair(s[t], t));
-        } else {
-            pair<char, int> p = st.top();
-            if(s[t] != p.first){
-                st.pop();
-                union_sets(p.second, t);
-                // cout << p.second+1 << " " << t+1 << endl;
-            } else {
-                st.push(make_pair(s[t], t));
-            }
+    vector<vector<ll> > pref(N, vector<ll>(N,0ll));
+    for(int i = 1; i < N; i++){
+        for(int j = 1; j < N; j++){
+            pref[i][j] = pref[i-1][j] + pref[i][j-1] - pref[i-1][j-1] + a[i][j];
         }
-        t++;
     }
-    set<int> si;
-    forn(i, 2*n){
-        int x = find_set(i);
-        si.insert(x);
+    while(q--){
+        int x,y,z,t;
+        cin >> x >> y >> z >> t;
+        cout << pref[z-1][t-1] - pref[x][t-1] - pref[z-1][y] + pref[x][y] << endl;
     }
-    int ans = si.size();
-    cout << ans << endl;
 }
 
 int main(){

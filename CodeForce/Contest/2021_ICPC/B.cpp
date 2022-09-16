@@ -13,7 +13,6 @@
 #include <queue>
 #include <random>
 #include <set>
-#include <stack>
 #include <vector>
 using namespace std;
 
@@ -51,74 +50,60 @@ const ll MOD = 1e9 + 7; // 998244353
 const ll INF = 1e9;
 const char min_char = 'a';
 
-vector<int> parent, rang;
-
-void make_set(int v) {
-    parent[v] = v;
-    rang[v] = 0;
-}
-
-int find_set(int v) {
-    if (v == parent[v])
-        return v;
-    return parent[v] = find_set(parent[v]);
-}
-
-void union_sets(int a, int b) {
-    a = find_set(a);
-    b = find_set(b);
-    if (a != b) {
-        if (rang[a] < rang[b])
-            swap(a, b);
-        parent[b] = a;
-        if (rang[a] == rang[b])
-            rang[a]++;
-    } else{
-        return;
+int convert(string s){
+    int t = 1;
+    int ans = 0;
+    for(int i = s.length() - 1; i >= 0; i--){
+        if(s[i] - '0' >= 0 && s[i] - '0' <= 9){
+            ans += t * ((int) s[i] - '0');
+            t *= 10;
+        } else {
+            return -1;
+        }
     }
+    return ans;
 }
 
 void solve(){
-    int n;
-    cin >> n;
-    parent.resize(2*n);
-    rang.resize(2*n);
-    forn(i, 2*n){
-        make_set(i);
+    string a, b;
+    cin >> a >> b;
+    int a1 = a.length();
+    int b1 = b.length();
+    string ans = "NaN";
+    // for(int i = 0; i < a1; i++){
+    //     if(a[i] - 'a' >= 0 && a[i] - 'a' <= 26){
+    //         ans = "NaN";
+    //         cout << ans << endl; 
+    //         return;
+    //     }
+    // }
+    // for(int i = 0; i < b1; i++){
+    //     if(b[i] - 'a' >= 0 && b[i] - 'a' <= 26){
+    //         ans = "NaN";
+    //         cout << ans << endl; 
+    //         return;
+    //     }
+    // }
+    int a2 = convert(a);
+    int b2 = convert(b);
+    // cout << a2 << " " << b2 << endl;
+    if(a2 == -1 || b2 == -1){
+        cout << "NaN" << endl;
+        return;
+    } else {
+        cout << a2 - b2 << endl;
+        return;
     }
-    string s;
-    cin >> s;
-    stack<pair<char, int> > st;
-    int t = 0;
-    while(t < 2*n){
-        if(st.empty()){
-            st.push(make_pair(s[t], t));
-        } else {
-            pair<char, int> p = st.top();
-            if(s[t] != p.first){
-                st.pop();
-                union_sets(p.second, t);
-                // cout << p.second+1 << " " << t+1 << endl;
-            } else {
-                st.push(make_pair(s[t], t));
-            }
-        }
-        t++;
-    }
-    set<int> si;
-    forn(i, 2*n){
-        int x = find_set(i);
-        si.insert(x);
-    }
-    int ans = si.size();
-    cout << ans << endl;
+    // int c = stoi(a) - stoi(b);
+    // cout << c << endl;
+    // return;
 }
 
 int main(){
     ios::sync_with_stdio(false);
     cin.tie(0);
-    int c;
-    cin >> c;
+    int c = 1;
+    // cin >> c;
     while(c--){
         solve();
     }

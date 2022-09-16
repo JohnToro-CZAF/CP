@@ -13,7 +13,6 @@
 #include <queue>
 #include <random>
 #include <set>
-#include <stack>
 #include <vector>
 using namespace std;
 
@@ -50,68 +49,60 @@ const int maxn = 1e5 + 5;
 const ll MOD = 1e9 + 7; // 998244353
 const ll INF = 1e9;
 const char min_char = 'a';
-
-vector<int> parent, rang;
-
-void make_set(int v) {
-    parent[v] = v;
-    rang[v] = 0;
-}
-
-int find_set(int v) {
-    if (v == parent[v])
-        return v;
-    return parent[v] = find_set(parent[v]);
-}
-
-void union_sets(int a, int b) {
-    a = find_set(a);
-    b = find_set(b);
-    if (a != b) {
-        if (rang[a] < rang[b])
-            swap(a, b);
-        parent[b] = a;
-        if (rang[a] == rang[b])
-            rang[a]++;
-    } else{
-        return;
-    }
-}
-
 void solve(){
-    int n;
-    cin >> n;
-    parent.resize(2*n);
-    rang.resize(2*n);
-    forn(i, 2*n){
-        make_set(i);
-    }
-    string s;
-    cin >> s;
-    stack<pair<char, int> > st;
-    int t = 0;
-    while(t < 2*n){
-        if(st.empty()){
-            st.push(make_pair(s[t], t));
-        } else {
-            pair<char, int> p = st.top();
-            if(s[t] != p.first){
-                st.pop();
-                union_sets(p.second, t);
-                // cout << p.second+1 << " " << t+1 << endl;
-            } else {
-                st.push(make_pair(s[t], t));
+    int n,m, sx, sy, d;
+    cin >> n >> m >> sx >> sy >> d;
+    sx--; sy--;
+    vvi a = vvi(n, vi(m, 0));
+    a[sx][sy] = 1;
+    for(int x = 1; x <= d; x++){
+        for(int y = 0; y <= x; y++){
+            int z = x - y;
+                forn(i, 4){
+                    int t1 = sx + (i % 2 ? -1 : 1) * y; 
+                    int t2 = sy + (i % 2 ? -1 : 1) * z;
+                    if(t1 >= 0 && t1 < n && t2 >= 0 && t2 < m){
+                        a[t1][t2] = 1;
+                    }
             }
         }
-        t++;
     }
-    set<int> si;
-    forn(i, 2*n){
-        int x = find_set(i);
-        si.insert(x);
+    // forn(i, n){
+    //     forn(j, m){
+    //         cout << a[i][j] << " ";
+    //     }
+    //     cout << endl;
+    // }
+    bool flag1 = false;
+    forn(i, n){
+        bool flag = false;
+        forn(j, m){
+            if(a[i][j] == 0){
+                flag = true;
+            }
+        }
+        if(flag){
+            flag1 = true;
+        }
     }
-    int ans = si.size();
-    cout << ans << endl;
+    forn(j, m){
+        bool flag = false;
+        forn(i, n){
+            if(a[i][j] == 0){
+                flag = true;
+            }
+        }
+        if(flag){
+            flag1 &= flag;
+        }
+    }
+    if(flag1){
+        cout << m+n-2 << endl;
+        return;
+    } else{
+        cout << -1 << endl;
+        return;
+    }
 }
 
 int main(){

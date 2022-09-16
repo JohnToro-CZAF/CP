@@ -13,7 +13,6 @@
 #include <queue>
 #include <random>
 #include <set>
-#include <stack>
 #include <vector>
 using namespace std;
 
@@ -50,68 +49,23 @@ const int maxn = 1e5 + 5;
 const ll MOD = 1e9 + 7; // 998244353
 const ll INF = 1e9;
 const char min_char = 'a';
-
-vector<int> parent, rang;
-
-void make_set(int v) {
-    parent[v] = v;
-    rang[v] = 0;
-}
-
-int find_set(int v) {
-    if (v == parent[v])
-        return v;
-    return parent[v] = find_set(parent[v]);
-}
-
-void union_sets(int a, int b) {
-    a = find_set(a);
-    b = find_set(b);
-    if (a != b) {
-        if (rang[a] < rang[b])
-            swap(a, b);
-        parent[b] = a;
-        if (rang[a] == rang[b])
-            rang[a]++;
-    } else{
-        return;
-    }
-}
-
 void solve(){
-    int n;
-    cin >> n;
-    parent.resize(2*n);
-    rang.resize(2*n);
-    forn(i, 2*n){
-        make_set(i);
-    }
-    string s;
-    cin >> s;
-    stack<pair<char, int> > st;
-    int t = 0;
-    while(t < 2*n){
-        if(st.empty()){
-            st.push(make_pair(s[t], t));
-        } else {
-            pair<char, int> p = st.top();
-            if(s[t] != p.first){
-                st.pop();
-                union_sets(p.second, t);
-                // cout << p.second+1 << " " << t+1 << endl;
-            } else {
-                st.push(make_pair(s[t], t));
+    // There are N persons and N tasks, each task is to be alloted to a single person. 
+    // We are also given a matrix NxN of size , where cost[i][j]denotes, how much person i
+    // is going to charge for task j. Now we need to assign each task to a person in such a way that the total
+    // cost is minimum. Note that each task is to be alloted to a single person, and each person will be alloted only one task.
+    int n; cin >> n;
+    for(int mask = 0; mask < (1<<n); ++mask){
+        int x = __builtin_popcount(mask);
+        for(int j = 0; j <= n; j++){
+            if(!((1<<j)&mask)){
+                // turn on the jth bit, x = how many task have been set so far - the number of bits in mask
+                dp[mask|(1<<j)] = min(dp[mask|(1<<j)], dp[mask] + cost[x][j]);
             }
         }
-        t++;
     }
-    set<int> si;
-    forn(i, 2*n){
-        int x = find_set(i);
-        si.insert(x);
-    }
-    int ans = si.size();
-    cout << ans << endl;
+    cout << dp[(1<<n) - 1] << endl;
+    //Time complexity of above algorithm is O(2^n(n^2)) and space complexity is O(2^n).
 }
 
 int main(){

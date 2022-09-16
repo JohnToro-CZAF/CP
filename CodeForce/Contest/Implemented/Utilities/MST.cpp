@@ -51,7 +51,7 @@ const ll INF = 1e9;
 const char min_char = 'a';
 struct edge{
     int u, v;
-    ll w;
+    double w;
 };
 vector<int> parent, rang;
 vector<edge> edges;
@@ -85,30 +85,86 @@ void union_sets(int a, int b) {
     }
 }
 
-
-void solve(){
-    int n, m;
-    cin >> n >> m;
+void make(int n){
     parent.resize(n);
-    map<pair<int, int>, int> weight;
     rang.resize(n);
-    adj = vvi(n, vi());
     forn(i, n){
         make_set(i);
     }
+}
+
+bool bpm(vvi bpGraph, int u,
+         bool seen[], int matchR[])
+{
+    int N = bpGraph.size();
+    int M = bpGraph[0].size();
+    for (int v = 0; v < N; v++)
+    {
+        if (bpGraph[u][v] && !seen[v])
+        {
+            seen[v] = true;
+            if (matchR[v] < 0 || bpm(bpGraph, matchR[v],
+                                     seen, matchR))
+            {
+                matchR[v] = u;
+                return true;
+            }
+        }
+    }
+    return false;
+}
+// The roads to the workers
+int maxBPM(vvi bpGraph)
+{
+    int N = bpGraph.size();
+    int M = bpGraph[0].size();
+    int matchR[N];
+    memset(matchR, -1, sizeof(matchR));
+    int result = 0;
+    for (int u = 0; u < M; u++)
+    {
+        bool seen[N];
+        memset(seen, 0, sizeof(seen));
+        if (bpm(bpGraph, u, seen, matchR))
+            result++;
+    }
+    return result;
+}
+
+void solve(){
+    int n, m, nw;
+    cin >> n >> m;
+    map<pair<int, int>, double> weight;
+    vector<ll> ak(n);
+    forn(i, n){
+        cin >> ak[i];
+    }
+    vector<pair<int, int> > roads;
+    adj = vvi(n, vi());
     forn(i, m){
-        int x, y, w;
-        cin >> x >> y >> w;
+        int x, y
+        cin >> x >> y;
         x--; y--;
         edge e;
+        double w = std::sqrt(ak[x] + ak[y]);
         e.u = x;
         e.v = y;
         e.w = w; 
+        roads.push_back(make_pair(x, y));
         weight[make_pair(x, y)] = w;
         weight[make_pair(y, x)] = w;
         edges.push_back(e);
     }
     sort(all(edges), cmp);
+    cin >> nw
+    vvi BG(n, vi(nw, 0));
+    for(int i = 0; i < nw; i++){
+        int bx; cin >> bx;
+        while(bx--){
+            int v; cin >> v; v--;
+            BG[v][i] = 1;
+        }
+    }
     // for(auto e : edges){
     //     // cout << e.v << " " << e.u << " " << e.w << endl;
     // }
@@ -119,7 +175,6 @@ void solve(){
         ll w = edges[it].w;
         if(find_set(u) != find_set(v)){
             union_sets(u, v);
-            
             // ans = max(ans, w); // maximum edge in the MST
             cnt++;
         } 

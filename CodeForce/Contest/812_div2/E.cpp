@@ -13,7 +13,6 @@
 #include <queue>
 #include <random>
 #include <set>
-#include <stack>
 #include <vector>
 using namespace std;
 
@@ -77,41 +76,74 @@ void union_sets(int a, int b) {
         return;
     }
 }
-
 void solve(){
-    int n;
-    cin >> n;
-    parent.resize(2*n);
-    rang.resize(2*n);
-    forn(i, 2*n){
+    int n, m;
+    vector<vector<int> > dirs = {{-1, 0}, {1, 0}, {0, -1}, {0, 1}, {1, 1}, {-1, 1}, {1, -1}, {-1, -1}};
+    cin >> n >> m;
+    parent.clear();
+    rang.clear();
+    parent.resize(n*m);
+    rang.resize(n*m);
+    vector<vector<int> > G(n, vector<int>(m, 0));
+    string s[n];
+    forn(i, n){
+        cin >> s[i];
+    }
+    for(int i = 0; i < n; i++){
+        for(int j = 0; j < m; j++){
+            G[i][j] = (s[i][j] == '*') ? 1 : 0;
+        }
+    }
+    for(int i = 0; i < n*m; i++){
         make_set(i);
     }
-    string s;
-    cin >> s;
-    stack<pair<char, int> > st;
-    int t = 0;
-    while(t < 2*n){
-        if(st.empty()){
-            st.push(make_pair(s[t], t));
-        } else {
-            pair<char, int> p = st.top();
-            if(s[t] != p.first){
-                st.pop();
-                union_sets(p.second, t);
-                // cout << p.second+1 << " " << t+1 << endl;
-            } else {
-                st.push(make_pair(s[t], t));
+    vector<pair<int,int> > edge;
+    for(int i = 0; i < n; i++){
+        for(int j = 0; j < m; j++){
+            for(auto dir : dirs){
+                if(i + dir[0] >= 0 && i + dir[0] < n && j + dir[1] >= 0 && j + dir[1] < m){
+                    if(G[i][j] == G[i+dir[0]][j+dir[1]] && G[i][j] == 1){
+                        edge.push_back(make_pair((i+dir[0])*m + j+dir[1], i*m+j));                     
+                    }
+                }
             }
         }
-        t++;
     }
-    set<int> si;
-    forn(i, 2*n){
-        int x = find_set(i);
-        si.insert(x);
+    for(auto e : edge){
+        if(find_set(e.first) != find_set(e.second)){
+            union_sets(e.first, e.second);
+        }
     }
-    int ans = si.size();
-    cout << ans << endl;
+    vector<vector<int> > tup(n*m, vector<int>());
+    for(int i = 0; i < n; i++){
+        for(int j = 0; j < m; j++){
+            if(G[i][j] == 1){
+                int x = find_set(i*m + j);
+                // cout << x << " ";
+                tup[x].push_back(i*m + j);
+            }
+        }
+    }
+
+    for(int i = 0; i < m*n; i++){
+        if(tup[i].size() == 0){
+            continue;
+        }
+        if(tup[i].size() != 3){
+            cout << "NO" << endl;
+            return;
+        } else {
+            set<int> x, y;
+            for(auto t : tup[i]){
+                x.insert(t/m); y.insert(t%m);
+            }   
+            if(x.size() == 3 || y.size() == 3){
+                cout << "NO" << endl;
+                return;
+            }
+        }
+    }
+    cout << "YES" << endl;
 }
 
 int main(){

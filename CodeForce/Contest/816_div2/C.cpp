@@ -13,7 +13,6 @@
 #include <queue>
 #include <random>
 #include <set>
-#include <stack>
 #include <vector>
 using namespace std;
 
@@ -50,75 +49,48 @@ const int maxn = 1e5 + 5;
 const ll MOD = 1e9 + 7; // 998244353
 const ll INF = 1e9;
 const char min_char = 'a';
-
-vector<int> parent, rang;
-
-void make_set(int v) {
-    parent[v] = v;
-    rang[v] = 0;
-}
-
-int find_set(int v) {
-    if (v == parent[v])
-        return v;
-    return parent[v] = find_set(parent[v]);
-}
-
-void union_sets(int a, int b) {
-    a = find_set(a);
-    b = find_set(b);
-    if (a != b) {
-        if (rang[a] < rang[b])
-            swap(a, b);
-        parent[b] = a;
-        if (rang[a] == rang[b])
-            rang[a]++;
-    } else{
-        return;
-    }
-}
-
 void solve(){
-    int n;
-    cin >> n;
-    parent.resize(2*n);
-    rang.resize(2*n);
-    forn(i, 2*n){
-        make_set(i);
+    int n, m;
+    cin >> n >> m;
+    vi a(n);
+    forn(i, n){
+        cin >> a[i];
     }
-    string s;
-    cin >> s;
-    stack<pair<char, int> > st;
-    int t = 0;
-    while(t < 2*n){
-        if(st.empty()){
-            st.push(make_pair(s[t], t));
-        } else {
-            pair<char, int> p = st.top();
-            if(s[t] != p.first){
-                st.pop();
-                union_sets(p.second, t);
-                // cout << p.second+1 << " " << t+1 << endl;
-            } else {
-                st.push(make_pair(s[t], t));
-            }
+    vi b(n, 0);
+    for(int i = 0; i < n; i++){
+        if(i+1 < n){
+            b[i] += a[i] != a[i+1];
         }
-        t++;
     }
-    set<int> si;
-    forn(i, 2*n){
-        int x = find_set(i);
-        si.insert(x);
+    int ans = n;
+    for(int i = 0; i < n-1; i++){
+        ans += 2*b[i]*((n-2) + (i*(n-2-i)));
     }
-    int ans = si.size();
     cout << ans << endl;
+    while(m--){
+        int i, x; cin >> i >> x;
+        i--;
+        a[i] = x;
+
+        if(i+1 < n){
+            ans -= 2*b[i]*((n-2) + (i*(n-2-i)));
+            b[i] = a[i] != a[i+1];
+            ans += 2*b[i]*((n-2) + (i*(n-2-i)));
+        } 
+        if(i > 0){
+            ans -= 2*b[i-1]*((n-2) + ((i-1)*(n-2-(i-1))));
+            b[i-1] = a[i] != a[i-1];
+            ans += 2*b[i-1]*((n-2) + ((i-1)*(n-2-(i-1))));
+        }
+    cout << ans << endl;
+    }
 }
 
 int main(){
     ios::sync_with_stdio(false);
     cin.tie(0);
-    int c;
-    cin >> c;
+    int c = 1;
+    // cin >> c;
     while(c--){
         solve();
     }
