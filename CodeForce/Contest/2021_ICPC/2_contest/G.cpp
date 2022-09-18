@@ -37,7 +37,7 @@ template<typename T>
 inline T power(T base, T powerRaised){if (powerRaised != 0) return (base*power(base, powerRaised-1)); else return 1;}
 
 template<typename T>
-inline T gcd(T a, T b){while(b){b^=a^=b^=a%=b;} return a;}
+inline T gcd(T x, T y){ T ans = x; T temp = y; while(ans != temp){if(ans < temp){ temp -= ans;} else{ans -= temp;}} return ans;}
 
 template<typename T>
 inline T lcm(T x, T y ){return x*y/gcd(x,y);}
@@ -45,36 +45,69 @@ inline T lcm(T x, T y ){return x*y/gcd(x,y);}
 template<typename T>
 inline T findLessPower(T base, T n){if(n==1){return 0;} T temp = log(n)/log(base); if(power(base, temp) == n){return temp-1;}else{return temp;}}
 
-const int maxn = 1e5 + 5;
-const ll MOD = 1e9 + 7; // 998244353
+const int N = 1e5 + 5;
+const ll MOD = 1e9+7; // 998244353;
 const ll INF = 1e9;
-const char min_char = 'a';
-void solve(){
-    int x, a, b, c;
-    cin >> x >> a >> b >> c;
-    int d[3+3];
-    d[1] = a; d[2] = b; d[3] = c;
-    if(d[x] == 0){
-        cout << "NO" << endl;
-        return; 
-    } else {
-        int next = d[x];
-        if(d[next] == 0){
-            cout << "NO" << endl;
-            return;
-        } else {
-            cout << "YES" << endl;
-        }
+
+ll fact[N], inv[N], invfact[N];
+
+template<typename T>
+inline T mul(T x, T y){return (x%MOD)*(y%MOD)%MOD;}
+
+template<typename T>
+inline T add(T x, T y) {x%=MOD;y%=MOD;x += y;if(x >= MOD) x-=MOD;return x;}
+
+ll modInverse(int a){
+    for (int x = 1; x < MOD; x++){
+        if (((a%MOD) * (x%MOD)) % MOD == 1) return x;
     }
 }
+
+void factInverse() {
+    fact[0] = inv[1] = fact[1] = invfact[0] = invfact[1] = 1;
+    fact[2] = inv[2] = invfact[2] = 1;
+    for(long long i = 3; i < N; i++){
+        fact[i] = (fact[i-1]*i)%MOD;
+        inv[i] = MOD - (inv[MOD%i]*(MOD/i)%MOD);
+        invfact[i] = (inv[i]*invfact[i-1])%MOD;
+    }
+}
+
+ll nCr(ll n, ll r){
+    if(r > n){return 0;}
+    return mul(mul(fact[n], invfact[r]), invfact[n-r]);
+}
+
+vector<ll> s(N, 0);
+vector<ll> dp(N, 0);
+vector<ll> ans(N, 0);
+void solve(){
+    for(int i = 1; i < N; i++){
+        for(int j = 2*i; j < N; j+=i){
+            s[j]++;
+        }   
+    }
+    dp[1] = 0;
+    for(int i = 2; i < N; i++){
+        dp[i] = add(dp[i-1], s[i]);
+    }
+    // cout << s[3] << endl;
+    // cout << "cac" << dp[3] << endl;
+    for(int i = 1; i < N; i++){
+        ans[i] = mul(dp[i], fact[i]);
+    }
+}       
 
 int main(){
     ios::sync_with_stdio(false);
     cin.tie(0);
+    factInverse();
+    solve();
     int c;
     cin >> c;
     while(c--){
-        solve();
+        int n; cin >> n;
+        cout << ans[n] << endl;
     }
 }
 

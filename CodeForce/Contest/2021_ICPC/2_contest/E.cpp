@@ -49,30 +49,74 @@ const int maxn = 1e5 + 5;
 const ll MOD = 1e9 + 7; // 998244353
 const ll INF = 1e9;
 const char min_char = 'a';
+
+vector<int> parent, rang, side;
+
+void make_set(int v) {
+    parent[v] = v;
+    rang[v] = 0;
+}
+
+int find_set(int v) {
+    if (v == parent[v])
+        return v;
+    return parent[v] = find_set(parent[v]);
+}
+
+void union_sets(int a, int b) {
+    a = find_set(a);
+    b = find_set(b);
+    if (a != b) {
+        if (rang[a] < rang[b])
+            swap(a, b);
+        parent[b] = a;
+        if (rang[a] == rang[b])
+            rang[a]++;
+    } else{
+        return;
+    }
+}
+
 void solve(){
-    int x, a, b, c;
-    cin >> x >> a >> b >> c;
-    int d[3+3];
-    d[1] = a; d[2] = b; d[3] = c;
-    if(d[x] == 0){
-        cout << "NO" << endl;
-        return; 
-    } else {
-        int next = d[x];
-        if(d[next] == 0){
-            cout << "NO" << endl;
-            return;
+    int n, m;
+    cin >> n >> m;
+    parent.resize(n);
+    rang.resize(n);
+    side.resize(n);
+    vector<pair<int, int> > edge;
+    forn(i, n){
+        make_set(i);
+    }
+    forn(i, m){
+        int x, y;
+        cin >> x >> y;
+        x--; y--;
+        edge.push_back(make_pair(x, y));
+    }
+    int cur = 0;
+    for(auto& p : edge){
+        if(p.first == n-1 || p.second == n-1){
+            continue;
         } else {
-            cout << "YES" << endl;
+            union_sets(p.first, p.second);
         }
     }
+    string ans = "";
+    int k = find_set(n-2);
+    forn(i, n){
+        if(k == find_set(i)){
+            ans += 'B';
+        } else{
+            ans += 'A';
+        }
+    }
+    cout << ans << endl;
 }
 
 int main(){
     ios::sync_with_stdio(false);
     cin.tie(0);
-    int c;
-    cin >> c;
+    int c = 1;
     while(c--){
         solve();
     }

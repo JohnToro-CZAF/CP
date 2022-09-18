@@ -50,14 +50,35 @@ const ll MOD = 1e9 + 7; // 998244353
 const ll INF = 1e9;
 const char min_char = 'a';
 void solve(){
+    ll n, q;
+    cin >> n >> q;
+    vector<ll> a(n);
+    forn(i, n){
+        cin >> a[i];
+    }
+    vector<ll> pref(n+1, 0);
+    for(int i = 1; i <= n; i++){
+        if(a[i] > a[i-1]){
+            pref[i] = pref[i-1] + a[i-1] - a[i];
+        }
+    }
+    while(q--){
+        int s, t;
+        cin >> s >> t;
+        // s--; t--;
+        if(s > t){
+            swap(s, t);
+        }
+        cout << pref[t] - pref[s] << endl;
+    }
 
 }
 
 int main(){
     ios::sync_with_stdio(false);
     cin.tie(0);
-    int c;
-    cin >> c;
+    int c = 1;
+    // cin >> c;
     while(c--){
         solve();
     }

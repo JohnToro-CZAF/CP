@@ -50,29 +50,34 @@ const ll MOD = 1e9 + 7; // 998244353
 const ll INF = 1e9;
 const char min_char = 'a';
 void solve(){
-    int x, a, b, c;
-    cin >> x >> a >> b >> c;
-    int d[3+3];
-    d[1] = a; d[2] = b; d[3] = c;
-    if(d[x] == 0){
-        cout << "NO" << endl;
-        return; 
-    } else {
-        int next = d[x];
-        if(d[next] == 0){
-            cout << "NO" << endl;
-            return;
-        } else {
-            cout << "YES" << endl;
+    int n;
+    cin >> n;
+    vvi dp(n, vi(3, 0));
+    vvi a(n, vi(3, 0));
+    forn(i, n){
+        cin >> a[i][0] >> a[i][1] >> a[i][2];
+    }
+    dp[0][0] = a[0][0]; dp[0][1] = a[0][1]; dp[0][2] = a[0][2];
+    forn(i, n){
+        forn(j, 3){
+            if(i >= 1){
+                dp[i][j] = max(dp[i][j], dp[i-1][(j+1)%3] + a[i][j]);
+                dp[i][j] = max(dp[i][j], dp[i-1][(j+2)%3] + a[i][j]);
+            }
         }
     }
-}
+    int ans = 0;
+    forn(i, 3){
+        ans = max(dp[n-1][i], ans);
+    }
+    cout << ans;
+}   
 
 int main(){
     ios::sync_with_stdio(false);
     cin.tie(0);
-    int c;
-    cin >> c;
+    int c = 1;
+    // cin >> c;
     while(c--){
         solve();
     }

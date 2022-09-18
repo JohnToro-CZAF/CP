@@ -50,22 +50,10 @@ const ll MOD = 1e9 + 7; // 998244353
 const ll INF = 1e9;
 const char min_char = 'a';
 void solve(){
-    int x, a, b, c;
-    cin >> x >> a >> b >> c;
-    int d[3+3];
-    d[1] = a; d[2] = b; d[3] = c;
-    if(d[x] == 0){
-        cout << "NO" << endl;
-        return; 
-    } else {
-        int next = d[x];
-        if(d[next] == 0){
-            cout << "NO" << endl;
-            return;
-        } else {
-            cout << "YES" << endl;
-        }
-    }
+    ll n;
+    cin >> n;
+    ll ans = n*(n-1)/2;
+    cout << ans << endl;
 }
 
 int main(){
