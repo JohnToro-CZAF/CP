@@ -49,14 +49,19 @@ const int maxn = 1e5 + 5;
 const ll MOD = 1e9 + 7; // 998244353
 const ll INF = 1e9;
 const char min_char = 'a';
-void solve(){
-    // LongestCommonString
-    string s, t;
-    cin >> s >> t;
-    int n = s.length();
-    int m = t.length();
-    
-}
+
+// int solve(string s, string t, int n, int m, vector<vector<int> >& dp){
+//     if(n == 0 || m == 0){
+//         return 0;
+//     } 
+//     if(s[n-1] == t[m-1]){
+//         dp[n][m] = 1 + solve(s, t, n-1, m-1, dp);
+//     }
+//     if(dp[n][m] != -1){
+//         return dp[n][m];
+//     }
+//     return dp[n][m] = max(solve(s, t, n-1, m, dp), solve(s, t, n, m-1, dp));
+// }
 
 int main(){
     ios::sync_with_stdio(false);
@@ -64,7 +69,44 @@ int main(){
     int c = 1;
     // cin >> c;
     while(c--){
-        solve();
+        string s, t;
+        cin >> s >> t;
+        int n = s.length();
+        int m = t.length();
+        vector<vector<int> > dp(n+1, vector<int>(m+1, -1));
+        // solve(s, t, n, m, dp);
+        for(int i = 0; i <= n; i++){
+            for(int j = 0; j <= m; j++){
+                if(i == 0 || j == 0){
+                    dp[i][j] = 0;
+                }
+                else if(s[i-1] == t[j-1]){
+                    dp[i][j] = dp[i-1][j-1] + 1;
+                } else {
+                    dp[i][j] = max(dp[i-1][j], dp[i][j-1]);
+                }
+            }
+        }
+        int i = n, j = m, index = dp[n][m];
+        string ans(index, '0');
+        while (i > 0 && j > 0) {
+            // If current character in X[] and Y are same, then
+            // current character is part of LCS
+            if (s[i - 1] == t[j - 1]) {
+                // cout << s[i-1] << endl;
+                ans[index - 1] = s[i - 1]; // Put current character in result
+                i--;
+                j--;
+                index--; // reduce values of i, j and index
+            }
+            // If not same, then find the larger of two and
+            // go in the direction of larger value
+            else if (dp[i - 1][j] > dp[i][j - 1])
+                i--;
+            else
+                j--;
+        }
+        cout << ans << endl;
     }
 }
 
