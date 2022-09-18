@@ -47,26 +47,41 @@ inline T findLessPower(T base, T n){if(n==1){return 0;} T temp = log(n)/log(base
 
 const int maxn = 1e5 + 5;
 const ll MOD = 1e9 + 7; // 998244353
-const ll INF = 1e9;
+const ll INF = 1e9+1;
 const char min_char = 'a';
 void solve(){
-    ll n, w;
-    cin >> n >> w;
-    vector<ll> we(n+1), v(n+1);
+    ll n, weight;
+    cin >> n >> weight;
+    vector<ll> v(n+1), w(n+1);
     forn(i, n){
-        cin >> we[i+1] >> v[i+1];
+        cin >> w[i+1] >> v[i+1];
     }
-    vector<vector<ll> > dp(n+1, vector<ll>(w+1, 0));
-
+    int maxv = 1e3*100;
+    vector<vector<ll> > dp(n+1, vector<ll>(maxv+1, INF));
+    dp[0][0] = 0;
     for(int i = 1; i <= n; i++){
-        for(int weight = 1; weight <= w; weight++){
-            dp[i][weight] = max(dp[i-1][weight], dp[i][weight]);
-            if(weight >= we[i]){
-                dp[i][weight] = max(dp[i-1][weight-we[i]] + v[i], dp[i][weight]);
-            } 
+        for(int j = 0; j <= maxv; j++){
+            dp[i][j] = min(dp[i-1][j], dp[i][j]);
+            if(j >= v[i]){
+                dp[i][j] = min(dp[i-1][j - v[i]] + w[i], dp[i][j]);
+            }
         }
     }
-    cout << dp[n][w] << endl;
+    ll ans = 0;
+    for(ll j = 1; j <= maxv; j++){
+        if(dp[n][j] != INF && dp[n][j] <= weight){
+            ans = max(ans, j);
+        }
+    }
+    cout << ans << endl;
+    // dp[i][value] as the minimum weight that needs to be carried
+    // (actually we do need to consider if it is minimum or not, just take it
+    // as long as the weight in current state do not exceed the maximum weight)
+    // if we only considered up to ith bags to get 'exactly' `value`
+    // If we take the ith bag
+    // dp[i][value] = dp[i-1][value-v[i]] + w[i]
+    // If we do not take 
+    // dp[i][value] = dp[i-1][value]
 }
 
 int main(){

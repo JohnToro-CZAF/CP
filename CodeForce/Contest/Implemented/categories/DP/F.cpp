@@ -50,14 +50,19 @@ const ll MOD = 1e9 + 7; // 998244353
 const ll INF = 1e9;
 const char min_char = 'a';
 void solve(){
+    // LongestCommonString
+    string s, t;
+    cin >> s >> t;
+    int n = s.length();
+    int m = t.length();
     
 }
 
 int main(){
     ios::sync_with_stdio(false);
     cin.tie(0);
-    int c;
-    cin >> c;
+    int c = 1;
+    // cin >> c;
     while(c--){
         solve();
     }
