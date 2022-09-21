@@ -64,14 +64,16 @@ void solve(){
     // 1 0 0
     // cout << "TEST" << endl; 
     for(int j = 0; j < n; j++){
-        for(int i = 0; i < j; i++){
+        for(int i = j-3; i >= 0; i-=2){
             if(((j - i) >= 3) && ((j - i + 1) % 2== 0)){
                 // Consider max of lows
                 // Choose i
-                int op1 = !((!dp[i+1][j-1] && (s[i] == s[j])) || (!dp[i+2][j] && (s[i] == s[i+1])));
-                // Choose j
-                int op2 = !((!dp[i+1][j-1] && (s[i] == s[j])) || (!dp[i][j-2] && (s[j-1] == s[j])));
-                dp[i][j] = max(op1, op2);
+                int op11 = dp[i+1][j-1] != 0 ? dp[i+1][j-1] : (s[i] > s[j]);
+                int op12 = dp[i+2][j] != 0 ? dp[i+2][j] : (s[i] > s[i+1]);
+                int op21 = dp[i+1][j-1] != 0? dp[i+1][j-1] : (s[j] > s[i]);
+                // choose j1
+                int op22 = dp[i][j-2] != 0? dp[i][j-2] : (s[j] > s[j-1]);
+                dp[i][j] = max(min(op12, op11), min(op21, op22));
                 // cout << i+1 << " " << j+1 << " " << dp[i][j] << endl;
                 // i i+1 i+2 .... j-2 j-1 j 
                 // if Alice choose i then B will choose 
@@ -81,10 +83,12 @@ void solve(){
             }
         }
     }
-    if(dp[0][n-1]){
+    if(dp[0][n-1] > 0){
         cout << "Alice" << endl;
-    } else {
+    } else if(dp[0][n-1] == 0) {
         cout << "Draw" << endl;
+    } else {
+        cout << "Bob" << endl;
     }
 }
 

@@ -1,0 +1,17 @@
+[
+	{
+		"test": "2\nforces\nabba\n"
+	},
+	{
+		"test": "1\naaabaa\n"
+	},
+	{
+		"test": "1\nabaa\n"
+	},
+	{
+		"test": "1\nababaa\n"
+	},
+	{
+		"test": "1\nbaba\n"
+	}
+]

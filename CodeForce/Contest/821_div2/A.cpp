@@ -50,42 +50,16 @@ const ll MOD = 1e9 + 7; // 998244353
 const ll INF = 1e9;
 const char min_char = 'a';
 void solve(){
-    string s;
-    cin >> s;
-    int n = s.length();
-    vector<vector<int> > dp(n, vi(n, 0));
-    for(int i = 0; i < n; i++){
-        if(i+1 < n){
-            if(s[i] != s[i+1]){
-                dp[i][i+1] = 1;
-            }
-        }
+    int n, k;
+    cin >> n >> k;
+    vector<ll> mod(k, 0);
+    vector<ll> a(n);
+    forn(i, n){
+        cin >> a[i];
+        mod[i%k] = max(mod[i%k], a[i]);
     }
-    // 1 0 0
-    // cout << "TEST" << endl; 
-    for(int j = 0; j < n; j++){
-        for(int i = 0; i < j; i++){
-            if(((j - i) >= 3) && ((j - i + 1) % 2== 0)){
-                // Consider max of lows
-                // Choose i
-                int op1 = !((!dp[i+1][j-1] && (s[i] == s[j])) || (!dp[i+2][j] && (s[i] == s[i+1])));
-                // Choose j
-                int op2 = !((!dp[i+1][j-1] && (s[i] == s[j])) || (!dp[i][j-2] && (s[j-1] == s[j])));
-                dp[i][j] = max(op1, op2);
-                // cout << i+1 << " " << j+1 << " " << dp[i][j] << endl;
-                // i i+1 i+2 .... j-2 j-1 j 
-                // if Alice choose i then B will choose 
-                // either j or i+1 -> low(solve(i+1, j-1), solve(i+2, j))
-                // If Alice choose j then B will choose 
-                // Either i or j-1 -> low(solve(i+1, j-1), solve(i, j-2))
-            }
-        }
-    }
-    if(dp[0][n-1]){
-        cout << "Alice" << endl;
-    } else {
-        cout << "Draw" << endl;
-    }
+    ll s = accumulate(all(mod), 0ll);
+    cout << s << endl;
 }
 
 int main(){
