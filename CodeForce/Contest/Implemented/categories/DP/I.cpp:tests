@@ -1,51 +1,5 @@
 [
 	{
-		"test": "2\nforces\nabba\n"
-	},
-	{
-		"test": "1\nbaaa\n"
-	},
-	{
-		"test": "1\naaba\n"
-	},
-	{
-		"test": "1\nbbaa\n"
-	},
-	{
-		"test": "1\nbaab\n"
-	},
-	{
-		"test": "1\nabbb\n"
-	},
-	{
-		"test": "1\ncbabca\n"
-	},
-	{
-		"test": "1\nbbaaaa\n"
-	},
-	{
-		"test": "1\nbbaa\n"
-	},
-	{
-		"correct_answers":
-		[
-			"Draw"
-		],
-		"test": "1\nabaaaa\n"
-	},
-	{
-		"test": "1\nabaa\n"
-	},
-	{
-		"test": "1\nabaaaa\n\n"
-	},
-	{
-		"test": "1\naaabbb\n"
-	},
-	{
-		"test": "1\nababba\n"
-	},
-	{
-		"test": "1\nababba\n"
+		"test": "3\n0.30 0.60 0.80\n"
 	}
 ]

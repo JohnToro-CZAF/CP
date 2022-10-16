@@ -45,19 +45,41 @@ inline T lcm(T x, T y ){return x*y/gcd(x,y);}
 template<typename T>
 inline T findLessPower(T base, T n){if(n==1){return 0;} T temp = log(n)/log(base); if(power(base, temp) == n){return temp-1;}else{return temp;}}
 
+
 const int maxn = 1e5 + 5;
 const ll MOD = 1e9 + 7; // 998244353
 const ll INF = 1e9;
 const char min_char = 'a';
-void solve(){
 
+template<typename T>
+inline T mul(T x, T y){return (x%MOD)*(y%MOD)%MOD;}
+
+template<typename T>
+inline T add(T x, T y) {x%=MOD;y%=MOD;x += y;if(x >= MOD) x-=MOD;return x;}
+
+void solve(){
+    int n, k;
+    cin >> n >> k;
+    vi dp(k+1, 0);
+    // dp[i] - the number of ways such that we used i candies so far
+    dp[0] = 1;
+    for(int child = 0; child < n; child++){
+        int up_to;
+        cin >> up_to;
+        for(int used = k; used >= 0; used--){
+            for(int here = 1; here <= min(up_to, k-used); ++here){
+                dp[used+here] = add(dp[used+here], dp[used]);
+            }
+        }
+    }
+    cout << dp[k] << endl;
 }
 
 int main(){
     ios::sync_with_stdio(false);
     cin.tie(0);
-    int c;
-    cin >> c;
+    int c = 1;
+    // cin >> c;
     while(c--){
         solve();
     }

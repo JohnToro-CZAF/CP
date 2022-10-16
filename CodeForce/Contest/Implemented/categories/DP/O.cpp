@@ -15,7 +15,7 @@
 #include <set>
 #include <vector>
 using namespace std;
-
+ 
 typedef long long ll;
 typedef vector<int> vi;
 typedef pair<int, int> pii;
@@ -32,34 +32,77 @@ typedef vector<string> vs;
 #define mem(a,b) memset(a, (b), sizeof(a))
 template<typename T>
 inline T cei(T x, T y){T t = (x+y-1)/y;return t;}
-
+ 
 template<typename T>
 inline T power(T base, T powerRaised){if (powerRaised != 0) return (base*power(base, powerRaised-1)); else return 1;}
-
+ 
 template<typename T>
 inline T gcd(T a, T b){while(b){b^=a^=b^=a%=b;} return a;}
-
+ 
 template<typename T>
 inline T lcm(T x, T y ){return x*y/gcd(x,y);}
-
+ 
 template<typename T>
 inline T findLessPower(T base, T n){if(n==1){return 0;} T temp = log(n)/log(base); if(power(base, temp) == n){return temp-1;}else{return temp;}}
-
+ 
 const int maxn = 1e5 + 5;
 const ll MOD = 1e9 + 7; // 998244353
 const ll INF = 1e9;
 const char min_char = 'a';
+ 
+template<typename T>
+inline T mul(T x, T y){return (x%MOD)*(y%MOD)%MOD;}
+ 
+template<typename T>
+inline T add(T x, T y) {x%=MOD;y%=MOD;x += y;if(x >= MOD) x-=MOD;return x;}
+ 
 void solve(){
-
+    int n;
+    cin >> n;
+    vvi a(n, vi(n, 0));
+    for(int i = 0; i < n; i++){
+        for(int j = 0; j < n; j++){
+            cin >> a[i][j];
+        }
+    }
+    vi dp(1<<n, 0);
+    for(int mask = 0; mask < (1<<n); mask++){
+        // mask the ith tasks is already assigned to somebody
+        int x = __builtin_popcount(mask);
+        // number of tasks that are already assigned
+        for(int j = 0; j < n ;j++){
+            // consider all the tasks
+            // if jth task has not been assigned to anybody yet
+            if(!((1<<j)&mask)){
+                // Only considered xth person
+                if(a[x][j]){
+                    if(x != 0){
+                        // 
+                        dp[mask | (1<<j)] = add(dp[mask|(1<<j)], dp[mask]);
+                    } else {
+                        // if there isn't any task has been assigned -> first way
+                        dp[mask | (1<<j)] = add(dp[mask|(1<<j)], 1);
+                    }
+                }
+            }
+        }
+    }
+    int ans = 0;
+    for(int i = 0; i < (1<<n); i++){
+        if(__builtin_popcount(i) == n){
+            ans = add(ans, dp[i]);
+        }
+    }
+    cout << ans << endl;
+    // cout << dp[(1<<n)-1]%MOD << endl;
 }
-
+ 
 int main(){
     ios::sync_with_stdio(false);
     cin.tie(0);
-    int c;
-    cin >> c;
+    int c = 1;
+    // cin >> c;
     while(c--){
         solve();
     }
 }
-

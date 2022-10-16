@@ -37,7 +37,7 @@ template<typename T>
 inline T power(T base, T powerRaised){if (powerRaised != 0) return (base*power(base, powerRaised-1)); else return 1;}
 
 template<typename T>
-inline T gcd(T a, T b){while(b){b^=a^=b^=a%=b;} return a;}
+inline T gcd(T x, T y){ T ans = x; T temp = y; while(ans != temp){if(ans < temp){ temp -= ans;} else{ans -= temp;}} return ans;}
 
 template<typename T>
 inline T lcm(T x, T y ){return x*y/gcd(x,y);}
@@ -45,54 +45,48 @@ inline T lcm(T x, T y ){return x*y/gcd(x,y);}
 template<typename T>
 inline T findLessPower(T base, T n){if(n==1){return 0;} T temp = log(n)/log(base); if(power(base, temp) == n){return temp-1;}else{return temp;}}
 
-const int maxn = 1e5 + 5;
-const ll MOD = 1e9 + 7; // 998244353
+const int N = 2e5 + 5;
+const ll MOD = 1e9+7; // 998244353;
 const ll INF = 1e9;
-const char min_char = 'a';
+
 void solve(){
-    string s;
-    cin >> s;
-    int n = s.length();
-    vector<vector<int> > dp(n, vi(n, 0));
-    for(int i = 0; i < n; i++){
-        if(i+1 < n){
-            if(s[i] != s[i+1]){
-                dp[i][i+1] = 1;
+    int n;
+    cin >> n;
+    vector<double> p(n+1);
+    forn(i, n){
+        cin >> p[i+1];
+    }
+    vector<vector<double>> dp(n+1, vector<double>(n+1, 0));
+    dp[0][0] = 1;
+    for(int i = 1; i <= n; i++){
+        for(int k = 0; k <= i; k++){
+            dp[k][i] = (1-p[i]) * dp[k][i-1];
+            if(k >= 1){
+                dp[k][i] += (p[i]) * dp[k-1][i-1];
             }
         }
     }
-    // 1 0 0
-    // cout << "TEST" << endl; 
-    for(int j = 0; j < n; j++){
-        for(int i = 0; i < j; i++){
-            if(((j - i) >= 3) && ((j - i + 1) % 2== 0)){
-                // Consider max of lows
-                // Choose i
-                int op1 = !((!dp[i+1][j-1] && (s[i] == s[j])) || (!dp[i+2][j] && (s[i] == s[i+1])));
-                // Choose j
-                int op2 = !((!dp[i+1][j-1] && (s[i] == s[j])) || (!dp[i][j-2] && (s[j-1] == s[j])));
-                dp[i][j] = max(op1, op2);
-                // cout << i+1 << " " << j+1 << " " << dp[i][j] << endl;
-                // i i+1 i+2 .... j-2 j-1 j 
-                // if Alice choose i then B will choose 
-                // either j or i+1 -> low(solve(i+1, j-1), solve(i+2, j))
-                // If Alice choose j then B will choose 
-                // Either i or j-1 -> low(solve(i+1, j-1), solve(i, j-2))
-            }
+
+    // n = 1,    2,            3,                                    4, 5, 6
+    // k=0 1-p1 (1-p1)*(1-p2) (1-p1)(1-p2)(1-p3)
+    // k=1 p1   (1-p1)p2+(1-p2)p1 (1-p3)((1-p1)p2+(1-p2)p1) + p3*((1-p1)*(1-p2))
+    // k=2 0      p1*p2
+
+    double ans = 0;
+    forn(i, n+1){
+        if(i > n/2){
+            ans += dp[i][n];
         }
     }
-    if(dp[0][n-1]){
-        cout << "Alice" << endl;
-    } else {
-        cout << "Draw" << endl;
-    }
-}
+    cout << setprecision(9) << ans << endl;
+}        
 
 int main(){
     ios::sync_with_stdio(false);
     cin.tie(0);
-    int c;
-    cin >> c;
+    // factInverse();
+    int c = 1;
+    // cin >> c;
     while(c--){
         solve();
     }

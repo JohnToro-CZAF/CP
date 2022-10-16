@@ -49,15 +49,54 @@ const int maxn = 1e5 + 5;
 const ll MOD = 1e9 + 7; // 998244353
 const ll INF = 1e9;
 const char min_char = 'a';
-void solve(){
 
+vector<vector<int> > adj(maxn, vector<int>());
+vector<bool> visited(maxn, false);
+vector<int> dp(maxn);
+vi topo;
+
+void dfs(int s){
+    visited[s] = true;
+    for(int q : adj[s]){
+        if(!visited[q]){
+            dfs(q);
+        }
+    }
+    topo.push_back(s);
+}
+
+void solve(){
+    int n, m;
+    cin >> n >> m;
+    adj.resize(n);
+    visited.resize(n);
+    dp.resize(n);
+    forn(i, m){
+        int x, y;
+        cin >> x >> y;
+        x--; y--;
+        adj[x].push_back(y);
+    }
+    forn(i, n){
+        if(!visited[i]){
+            dfs(i);
+        }
+    }
+    reverse(all(topo));
+    forn(i, n){
+        for(int q : adj[topo[i]]){
+            dp[q] = max(dp[topo[i]] + 1, dp[q]);
+        }
+    }
+    int mx = *max_element(all(dp));
+    cout << mx << endl;
 }
 
 int main(){
     ios::sync_with_stdio(false);
     cin.tie(0);
-    int c;
-    cin >> c;
+    int c = 1;
+    // cin >> c;
     while(c--){
         solve();
     }

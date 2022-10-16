@@ -47,17 +47,46 @@ inline T findLessPower(T base, T n){if(n==1){return 0;} T temp = log(n)/log(base
 
 const int maxn = 1e5 + 5;
 const ll MOD = 1e9 + 7; // 998244353
-const ll INF = 1e9;
+const ll INF = 1e18;
 const char min_char = 'a';
 void solve(){
+    int n;
+    cin >> n;
+    vector<ll> a(n);
+    forn(i, n){
+        cin >> a[i];
+    }
+    vector<vector<ll>> dp(n+1, vector<ll>(n+1, INF));
+    for(int i = 0; i < n; i++){
+        dp[i][i] = 0;
+    }
+    vector<ll> pref(n+1, 0);
+    pref[0] = 0;
+    for(int i = 1; i <= n; i++){
+        pref[i] = pref[i-1] + a[i-1];
+    }
+    for(int l = 2; l <= n; l++){
+        for(int i = 0; i+l-1 < n; i++){
+            for(int j = i; j+1 < i+l; j++){
+                dp[i][i+l-1] = min(dp[i][i+l-1], dp[i][j] + dp[j+1][i+l-1] + pref[i+l-1 + 1] - pref[i]);
+            }
+        }
+    }
 
+    // for(int l = 1; l <= n; l++){
+    //     for(int i = 0; i+l-1 < n; i++){
+    //         cout << dp[i][i+l-1] << " ";
+    //     }
+    //     cout << endl;
+    // }
+    cout << dp[0][n-1] << endl;
 }
 
 int main(){
     ios::sync_with_stdio(false);
     cin.tie(0);
-    int c;
-    cin >> c;
+    int c = 1;
+    // cin >> c;
     while(c--){
         solve();
     }

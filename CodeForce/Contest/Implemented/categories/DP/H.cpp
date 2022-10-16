@@ -49,15 +49,58 @@ const int maxn = 1e5 + 5;
 const ll MOD = 1e9 + 7; // 998244353
 const ll INF = 1e9;
 const char min_char = 'a';
-void solve(){
 
+template<typename T>
+inline T mul(T x, T y){return (x%MOD)*(y%MOD)%MOD;}
+
+template<typename T>
+inline T add(T x, T y) {x%=MOD;y%=MOD;x += y;if(x >= MOD) x-=MOD;return x;}
+
+
+void solve(){
+    int n, m;
+    cin >> n >> m;
+    vector<string> s(n);
+    forn(i, n){
+        cin >> s[i];
+    }
+    vector<vector<int>> dp(n, vector<int>(m, 0));
+    forn(i, n){
+        if(s[i][0] == '#') break;
+        dp[i][0] = 1;
+    }
+    forn(j, m){
+        if(s[0][j] == '#') break;
+        dp[0][j] = 1;
+    }
+    for(int j = 0; j < m; j++){
+        for(int i = 0; i < n; i++){
+            // cout << i << " " << j << endl;
+            if(s[i][j] == '#') continue;
+            if(i != 0 && j != 0){
+                if(i-1 >= 0 && s[i-1][j] == '.'){
+                    dp[i][j] = add(dp[i-1][j], dp[i][j]);
+                }
+                if(j-1 >= 0 && s[i][j-1] == '.'){
+                    dp[i][j] = add(dp[i][j-1], dp[i][j]);
+                }
+            }
+        }
+    }
+    forn(i, n){
+        forn(j, m){
+            // cout << dp[i][j] << " ";
+        }
+        // cout << endl;
+    }
+    cout << dp[n-1][m-1] << endl;
 }
 
 int main(){
     ios::sync_with_stdio(false);
     cin.tie(0);
-    int c;
-    cin >> c;
+    int c = 1;
+    // cin >> c;
     while(c--){
         solve();
     }
