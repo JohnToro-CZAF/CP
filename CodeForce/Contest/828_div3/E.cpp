@@ -49,8 +49,28 @@ const int maxn = 1e5 + 5;
 const ll MOD = 1e9 + 7; // 998244353
 const ll INF = 1e9;
 const char min_char = 'a';
+vector<pair<ll, ll>> trial_division(long long n) {
+    vector<pair<ll, ll>> factorization;
+    for (long long d = 2; d * d <= n; d++) {
+        int cnt = 0;
+        while (n % d == 0) {
+            cnt++;
+            n /= d;
+        }
+        if(cnt){
+            factorization.push_back({d, cnt});
+        }
+    }
+    if (n > 1)
+        factorization.push_back({n, 1});
+    return factorization;
+}
 void solve(){
-
+    ll a,b,c,d;
+    cin >> a >> b >> c >> d;
+    vector<pair<ll,ll>> cuaa = trial_division(a);
+    vector<pair<ll,ll>> cuab = trial_division(b);
+    
 }
 
 int main(){
@@ -62,4 +82,5 @@ int main(){
         solve();
     }
 }
+
 

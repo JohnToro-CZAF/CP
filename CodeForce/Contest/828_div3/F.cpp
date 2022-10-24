@@ -50,7 +50,39 @@ const ll MOD = 1e9 + 7; // 998244353
 const ll INF = 1e9;
 const char min_char = 'a';
 void solve(){
-
+    int n;
+    cin >> n;
+    string s;
+    cin >> s;
+    s += '0';
+    vi a(n);
+    forn(i, n){
+        cin >> a[i];
+    }
+    int it = 0;
+    ll ans = 0;
+    while(it < n){
+        if(s[it] == '1'){
+            int idx = it;
+            ll tempsum = 0;
+            int mi = INF;
+            while(it < n && s[it] == '1'){
+                mi = min(mi, a[it]);
+                tempsum += a[it];
+                it++;
+            }
+            // it = n | s[it] == '0'
+            if(idx >= 1){
+                if(a[idx-1] >= mi){
+                    tempsum -= mi;
+                    tempsum += a[idx-1];
+                }
+            }
+            ans += tempsum;
+        }
+        it++;
+    }
+    cout << ans << endl;
 }
 
 int main(){

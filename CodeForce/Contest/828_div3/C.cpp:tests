@@ -1,0 +1,14 @@
+[
+	{
+		"test": "6\n5 r\nrggry\n1 g\ng\n3 r\nrrg\n5 y\nyrrgy\n7 r\nrgrgyrg\n9 y\nrrrgyyygy\n"
+	},
+	{
+		"test": "1\n7\nr\nrrrrggg\n"
+	},
+	{
+		"test": "1\n7 r\ngggrggg\n"
+	},
+	{
+		"test": "1\n7 r\nrrggrgr\n"
+	}
+]

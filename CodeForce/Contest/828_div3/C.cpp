@@ -50,7 +50,37 @@ const ll MOD = 1e9 + 7; // 998244353
 const ll INF = 1e9;
 const char min_char = 'a';
 void solve(){
-
+    int n; cin >> n;
+    char c; cin >> c;
+    string s; cin >> s;
+    if(c == 'g'){
+        cout << 0 << endl;
+        return;
+    }
+    int it = 0;
+    int cnt = 0;
+    int ans = 0;
+    bool done = false;
+    while(!done && it < n){
+        if(s[it] != c){
+            it++;
+            continue;
+        }
+        if(s[it] == c){
+            cnt = 0;
+            it++;
+            while(s[it] != 'g'){
+                cnt++;
+                it++;
+                if(it >= n){
+                    it = it%n;
+                    done = true;
+                }
+            }
+            ans = max(ans, cnt+1);
+        }
+    }
+    cout << ans << endl;
 }
 
 int main(){

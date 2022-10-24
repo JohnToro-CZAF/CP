@@ -105,14 +105,6 @@ void solve(){
         } else {
             int x; cin >> x; x--;
             int u = find_set(x).first;
-            // forn(i, n){
-            //     cout << parent[i]+1 << " ";
-            // }
-            // cout << endl;
-            // forn(i, n){
-            //     cout << point[i] << " ";
-            // }
-            // cout << endl;
             cout << point[x] << endl;
         }
     }

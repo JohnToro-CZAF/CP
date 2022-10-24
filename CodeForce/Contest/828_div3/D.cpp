@@ -50,7 +50,52 @@ const ll MOD = 1e9 + 7; // 998244353
 const ll INF = 1e9;
 const char min_char = 'a';
 void solve(){
-
+    int n;
+    cin >> n;
+    vector<ll> a(n+1);
+    forn(i, n){
+        cin >> a[i+1];
+    }
+    int cnt = 0;
+    forn(i, n){
+        while(a[i+1]%2 == 0){
+            cnt++;
+            a[i+1] /= 2;
+        }
+    }
+    // cout << cnt << endl;
+    int near = log(n)/log(2);
+    vi v;
+    for(int i = 1; i <= n; i++){
+        int cur = i;
+        int tot = 0;
+        while(cur % 2 == 0){
+            tot++;
+            cur /= 2;
+        }
+        if(i%2 == 0){
+            v.push_back(tot);
+        }
+    }
+    if(!v.empty()){
+        sort(v.rbegin(), v.rend());
+    }
+    for(auto u : v){
+        // cout << u << " ";
+    }
+    // cout << endl;
+    int it = 0;
+    int ans = 0;
+    while(cnt < n && it < v.size()){
+        cnt += v[it];
+        ans++;
+        it++;
+    }
+    if(cnt >= n){
+        cout << ans << endl;
+    } else {
+        cout << -1 << endl;
+    }
 }
 
 int main(){

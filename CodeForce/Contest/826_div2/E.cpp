@@ -50,14 +50,95 @@ const ll MOD = 1e9 + 7; // 998244353
 const ll INF = 1e9;
 const char min_char = 'a';
 void solve(){
+    int n;
+    cin >> n;
+    string s;
+    cin >> s;
+    vi pos;
+    int count = 0;
+    while(count < s.size() && s[count] == '0'){
+        count++;
+    }
+    s = s.substr(count, n);
+    n = s.size();
+    if(n == 0){
+        cout << 0 << endl;
+        return;
+    }
+    forn(i, n){
+        if(s[i] == '0'){
+            pos.push_back(i);
+        }
+    }
+    if(pos.size() == 0){
+        cout << s << endl;
+        return;
+    } 
+    if(pos.size() == 1){
+        if(n == 2){
+            if(pos[0] == 0){
+                cout << 1 << endl;
+            } else {
+                cout << "11" << endl;
+            }
+            return;
+        } else {
+            if(pos[0] == 0){
+                cout << s.substr(1, n) << endl;
+                return;
+            } else {
+                forn(i, n){
+                    cout << '1';
+                }
+                cout << endl;
+                return;
+            }
+        }
+    }
 
+    for(int i = 1; i < pos.size(); i++){
+        pos[i] -= pos[0];
+    }
+    pos[0] = 0;
+
+    string tot = "";
+    int m = n - 1 - pos[0] + 1;
+    // cout << m << endl;
+    for(int i = 0; i < n-m+1; i++){
+        string ans = "";
+        string res = "";
+        int it = 0;
+        for(int j = i; j < i+m; j++){
+            res += s[j];
+        }
+        while(res.size() < n){
+            res = '0' + res;
+        }
+        cout << res << endl;
+        for(int j = 0; j < n; j++){
+            if(s[j] == '1' || res[j] == '1'){
+                ans = ans + '1';
+            } else {
+                ans = ans + '0';
+            }
+        }
+        // cout << ans << endl;
+        if(tot.size() == 0){
+            tot = ans;
+        } else {
+            if(ans > tot){
+                tot = ans;
+            }
+        }
+    }
+    cout << tot << endl;
 }
 
 int main(){
     ios::sync_with_stdio(false);
     cin.tie(0);
-    int c;
-    cin >> c;
+    int c = 1;
+    // cin >> c;
     while(c--){
         solve();
     }

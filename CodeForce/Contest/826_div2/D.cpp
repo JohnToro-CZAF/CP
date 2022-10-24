@@ -49,15 +49,59 @@ const int maxn = 1e5 + 5;
 const ll MOD = 1e9 + 7; // 998244353
 const ll INF = 1e9;
 const char min_char = 'a';
+    bool canReorderDoubled(vector<int>& arr) {
+        multiset<int> s;
+        sort(all(arr));
+        multiset<int> sn;
+        for(int i : arr){
+            if(i >= 0){
+                s.insert(i);
+            } else {
+                sn.insert(abs(i));
+            }
+        }
+        bool f = true;
+        while(!s.empty()){
+            auto it = s.begin();
+            int cur = *it;
+            // cout << cur << " ";
+            s.erase(it);
+            if(s.find(2*cur) != s.end()){
+                // cout << *s.find(2*cur) << endl;
+                s.erase(s.find(2*cur));
+            } else {
+                return false;
+            }
+        }
+        while(!sn.empty()){
+            auto it = sn.begin();
+            int cur = *it;
+            // cout << cur << " ";
+            sn.erase(it);
+            if(sn.find(2*cur) != sn.end()){
+                // cout << *sn.find(2*cur) << endl;
+                sn.erase(sn.find(2*cur));
+            } else {
+                return false;
+            }
+        }
+        return true;
+    }
 void solve(){
-
+    int n;
+    cin >> n;
+    vi a(n);
+    forn(i, n){
+        cin >> a[i];
+    }
+    cout << canReorderDoubled(a) << endl;
 }
 
 int main(){
     ios::sync_with_stdio(false);
     cin.tie(0);
-    int c;
-    cin >> c;
+    int c = 1;
+    // cin >> c;
     while(c--){
         solve();
     }

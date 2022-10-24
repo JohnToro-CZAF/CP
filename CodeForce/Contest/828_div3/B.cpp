@@ -50,12 +50,40 @@ const ll MOD = 1e9 + 7; // 998244353
 const ll INF = 1e9;
 const char min_char = 'a';
 void solve(){
-
+    int n, q;
+    cin >> n >> q;
+    vi a(n);
+    ll sum = 0;
+    vi cnt(2);
+    forn(i, n){
+        cin >> a[i];
+        cnt[a[i]%2]++;
+        sum += a[i];
+    }
+    forn(_, q){
+        int cmd; cin >> cmd;
+        int increment; cin >> increment;
+        if(increment % 2 == 0){
+            sum += cnt[cmd%2]*increment;
+        } else {
+            if(cmd == 0){
+                sum += cnt[0]*increment;
+                cnt[0] = 0;
+                cnt[1] = n; 
+            } else {
+                sum += cnt[1]*increment;
+                cnt[1] = 0;
+                cnt[0] = n;
+            }
+        }
+        cout << sum << endl;
+    }
 }
 
 int main(){
     ios::sync_with_stdio(false);
     cin.tie(0);
+    cout.tie(0);
     int c;
     cin >> c;
     while(c--){
