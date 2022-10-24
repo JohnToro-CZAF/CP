@@ -1,4 +1,4 @@
-#include <algorithm>
+ #include <algorithm>
 #include <array>
 #include <bitset>
 #include <cassert>
@@ -102,45 +102,13 @@ void solve(){
         adj[y].push_back(x);
     }
     dfs(0, 0);
-    cin >> q;
-    // cout << lca(0, 3)+1 << endl;
-    while(q--){
-        int k; cin >> k;
-        vi query(k);
-        forn(i, k){
-            cin >> query[i];
-            query[i]--;
-        }
-        // sort(all(query));
-        int it = 0;
-        int u = query[0];
-        int v;
-        while(it < query.size()){
-            if(it + 1 < query.size()){
-                
-            }
-            it++;
-        }
-        if(it == query.size()){
-            cout << "Yes" << endl;
-        } else {
-            bool f = true;
-            int common = lca(u,v);
-            for(int i = it; i < query.size(); i++){
-                if(!is_ancestor(common, query[it])){
-                    f = false;
-                }
-            }
-            cout << (f ? "Yes" : "No") << endl;
-        }
-    }
 }
 
 int main(){
     ios::sync_with_stdio(false);
     cin.tie(0);
-    int c = 1;
-    // cin >> c;
+    int c;
+    cin >> c;
     while(c--){
         solve();
     }
