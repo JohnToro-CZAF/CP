@@ -45,7 +45,7 @@ inline T lcm(T x, T y ){return x*y/gcd(x,y);}
 template<typename T>
 inline T findLessPower(T base, T n){if(n==1){return 0;} T temp = log(n)/log(base); if(power(base, temp) == n){return temp-1;}else{return temp;}}
  
-const int maxn = 3e5 + 5;
+const int maxn = 1e5 + 5;
 const ll MOD = 1e9 + 7; // 998244353
 const ll INF = 1e18;
 const char min_char = 'a';
@@ -61,28 +61,26 @@ struct state {
         return dist > other.dist;
     }
 };
-
-vector<ll> dp(maxn, INF);
-vector<vector<pair<pii, ll>>> g(maxn, vector<pair<pii, ll>>());
-
+ 
+map<pii, ll> dp;
 int n, m;
 int p, q;
 vector<string> s;
+vector<map<pii, vector<pair<pii, ll>>>> g(2);
 vector<vector<int>> dirs = {{0, -1}, {0, 1}, {1, 0}, {-1, 0}};
 vector<vector<pii>> sources(2);
 map<char, pii> dits;
 priority_queue<state> pq;
  
-pair<int, int> inconv(int x){
-    return {x/m, x%m};
-}
-
-int conv(pair<int, int> p){
-    return p.first*m + p.second;
-}
-
 bool is_valid(int x, int y){
     return (x >= 0 && x < n) && (y >= 0 && y < m);
+}
+ 
+void dijkstra_check(priority_queue<state> &pq, pii node, ll new_dist) {
+    if (new_dist < dp[node]) {
+        dp[node] = new_dist;
+        pq.push(state(node, dp[node]));
+    }
 }
  
 int main(){
@@ -105,6 +103,7 @@ int main(){
     //      x
     for(int i = 0; i < n; i++){
         for(int j = 0; j < m; j++){
+            dp[{i, j}] = INF;
             if(s[i][j] != '#'){
                 for(auto dir : dirs){
                     int x = i + dir[0], y = j + dir[1];
@@ -116,7 +115,10 @@ int main(){
                         if(!is_valid(x1, y1) || (i == x1 && j == y1)) continue;
                         if((x1+y1)%2 != (i+j)%2) continue;
                         ll w = (i == x1 || j == y1) ? q : p;
-                        g[conv({i, j})].push_back({{x1, y1}, w});
+                        if(g[(i+j)%2][{i, j}].size() == 0){
+                            g[(i+j)%2][{i, j}] = vector<pair<pii, ll>>();
+                        }
+                        g[(i+j)%2][{i, j}].push_back({{x1, y1}, w});
                     }
                 }
             }
@@ -125,36 +127,35 @@ int main(){
     forn(i, n){
         forn(j, m){
             if(s[i][j] != '#'){
-                for(auto p : g[conv({i, j})]){
-                    // cout << i << " " << j << ": " << p.first.first << " " << p.first.second << " " << p.second << endl;
+                for(auto p : g[(i+j)%2][{i, j}]){
+                    cout << i << " " << j << ": " << p.first.first << " " << p.first.second << " " << p.second << endl;
                 }
             }
         }
     }
     forn(_, 2){
         for(auto source : sources[_]){
-            dp[conv(source)] = 0;
+            dp[source] = 0;
             pq.push(state(source, 0));
         }
         while(!pq.empty()){
             state top = pq.top();
             pq.pop();
  
-            if(top.dist > dp[conv(top.node)]) continue;
+            if(top.dist > dp[top.node]) continue;
  
-            for(auto p : g[conv(top.node)]){
+            for(auto p : g[_][top.node]){
                 pii to = p.first; ll w = p.second;
-                if (top.dist + w < dp[conv(to)]) {
-                    dp[conv(to)] = top.dist + w;
-                    pq.push(state(to, dp[conv(to)]));
+                if (top.dist + w < dp[to]) {
+                    dp[to] = top.dist + w;
+                    pq.push(state(to, dp[to]));
                 }
             }
         }
     }
-
     forn(i, n){
         forn(j, m){
-            // cout << i << " " << j << " " << dp[conv({i, j})] << endl;
+            cout << i << " " << j << " " << dp[{i, j}] << endl;
         }
     }
     ll ans = INF;
@@ -163,8 +164,8 @@ int main(){
             for(auto dir : dirs){
                 int x = i + dir[0], y = j + dir[1];
                 if(!is_valid(x, y)) continue;
-                if(dp[conv({i, j})] != INF && dp[conv({x, y})] != INF){
-                    ll res = dp[conv({i, j})] + dp[conv({x, y})];
+                if(dp[{i, j}] != INF && dp[{x, y}] != INF){
+                    ll res = dp[{i, j}] + dp[{x, y}];
                     ans = min(ans, res);
                     if(ans == 0){
                         cout << 0 << endl;
@@ -181,4 +182,3 @@ int main(){
     }
     return 0;
 }
- 
