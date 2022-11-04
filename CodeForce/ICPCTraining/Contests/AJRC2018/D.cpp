@@ -3,6 +3,7 @@
 #include <bitset>
 #include <cassert>
 #include <chrono>
+#include <math.h>
 #include <cmath>
 #include <cstring>
 #include <functional>
@@ -14,9 +15,7 @@
 #include <random>
 #include <set>
 #include <vector>
-#include <stack>
 using namespace std;
-
 typedef long long ll;
 typedef vector<int> vi;
 typedef pair<int, int> pii;
@@ -46,68 +45,40 @@ inline T lcm(T x, T y ){return x*y/gcd(x,y);}
 template<typename T>
 inline T findLessPower(T base, T n){if(n==1){return 0;} T temp = log(n)/log(base); if(power(base, temp) == n){return temp-1;}else{return temp;}}
 
+const double pi = 3.141592653589793238462643383279502884L;
 const int maxn = 1e5 + 5;
 const ll MOD = 1e9 + 7; // 998244353
 const ll INF = 1e9;
 const char min_char = 'a';
-
-int n;
-vi p;
-vi a; // permutations
-vvi adj;
-vi ans;
-
-int keep = 1;
-void dfs(int s, int p){
-    for(int v : adj[s]){
-        if(v == p) continue;
-        dfs(v, s);
-    }
-    a[s] = keep++;
-}
-
-void dfs1(int s, int p){
-    int cur_min = a[s];
-    for(int v : adj[s]){
-        if(v == p) continue;
-        dfs1(v, s);
-        cur_min = min(cur_min, a[v]);
-    }
-    a[s] = cur_min;
-    ans.push_back(cur_min);
-}
-
 void solve(){
-    cin >> n;
-    adj = vvi(n, vi());
-    p = vi(n);
-    a = vi(n);
-    forn(i, n-1){
-        cin >> p[i+1]; p[i+1]--;
-        adj[p[i+1]].push_back(i+1);
-        adj[i+1].push_back(p[i+1]);
+    double a, b, r, d;
+    cin >> a >> b >> r >> d;
+    cout << fixed;
+    double d1 = (double) d/180 * pi;
+    double tba = (double) b/(a+r);
+    double ab = atan(tba);
+    // cout << d1 << endl;
+    // cout << ab << endl;
+    double s = 0.0;
+    if(d1 >= ab){
+        // nothing
+        s = sqrt(b*b + (a+r)*(a+r));
+        s = s - r;
+    } else {
+        double h1 = sqrt((a+r)*(a+r) + b*b);
+        d1 = ab - d1;
+        s = cos(d1) * h1;
+        // cout << s << endl;
+        s = s - r;
     }
-    dfs(0, -1);
-    dfs1(0, -1);
-    forn(i, n){
-        cout << ans[i] << " ";
-    }
-    stack<int> st;
-    st.push(0);
-    for(int i = 0; i < n; i++){
-        int top = st.top();
-        if(ans[i] >= top){
-            st.push(ans[i]);
-        }
-    }
-    cout << int(st.size()) - 1 << endl;
+    cout << setprecision(12) << s << endl;
 }
 
 int main(){
     ios::sync_with_stdio(false);
     cin.tie(0);
-    int c = 1;
-    // cin >> c;
+    int c;
+    cin >> c;
     while(c--){
         solve();
     }

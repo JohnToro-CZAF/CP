@@ -14,7 +14,6 @@
 #include <random>
 #include <set>
 #include <vector>
-#include <stack>
 using namespace std;
 
 typedef long long ll;
@@ -50,64 +49,31 @@ const int maxn = 1e5 + 5;
 const ll MOD = 1e9 + 7; // 998244353
 const ll INF = 1e9;
 const char min_char = 'a';
-
-int n;
-vi p;
-vi a; // permutations
-vvi adj;
-vi ans;
-
-int keep = 1;
-void dfs(int s, int p){
-    for(int v : adj[s]){
-        if(v == p) continue;
-        dfs(v, s);
-    }
-    a[s] = keep++;
-}
-
-void dfs1(int s, int p){
-    int cur_min = a[s];
-    for(int v : adj[s]){
-        if(v == p) continue;
-        dfs1(v, s);
-        cur_min = min(cur_min, a[v]);
-    }
-    a[s] = cur_min;
-    ans.push_back(cur_min);
-}
-
 void solve(){
-    cin >> n;
-    adj = vvi(n, vi());
-    p = vi(n);
-    a = vi(n);
-    forn(i, n-1){
-        cin >> p[i+1]; p[i+1]--;
-        adj[p[i+1]].push_back(i+1);
-        adj[i+1].push_back(p[i+1]);
+    vi a(4);
+    int cnt = 0;
+    forn(i, 4){
+        cin >> a[i];
+        cnt += a[i] != 0;
     }
-    dfs(0, -1);
-    dfs1(0, -1);
-    forn(i, n){
-        cout << ans[i] << " ";
+    if(cnt == 4){
+        cout << "Contemporary Xu Xiake" << endl;
+    } else if(cnt == 3){
+        cout << "Excellent Traveller" << endl;
+    } else if(cnt == 2){
+        cout << "Young Traveller" << endl;
+    } else if(cnt == 1){
+        cout << "Eye-opener" << endl;
+    } else {
+        cout << "Typically Otaku" << endl;
     }
-    stack<int> st;
-    st.push(0);
-    for(int i = 0; i < n; i++){
-        int top = st.top();
-        if(ans[i] >= top){
-            st.push(ans[i]);
-        }
-    }
-    cout << int(st.size()) - 1 << endl;
 }
 
 int main(){
     ios::sync_with_stdio(false);
     cin.tie(0);
-    int c = 1;
-    // cin >> c;
+    int c;
+    cin >> c;
     while(c--){
         solve();
     }
