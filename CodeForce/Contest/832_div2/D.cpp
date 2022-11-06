@@ -45,37 +45,35 @@ inline T lcm(T x, T y ){return x*y/gcd(x,y);}
 template<typename T>
 inline T findLessPower(T base, T n){if(n==1){return 0;} T temp = log(n)/log(base); if(power(base, temp) == n){return temp-1;}else{return temp;}}
 
-const int maxn = 1e6+4;
+const int maxn = 2e5 + 5;
 const ll MOD = 1e9 + 7; // 998244353
 const ll INF = 1e9;
 const char min_char = 'a';
 
-string s;
+vi b;
+int n;
 
 struct Node {
-    int optimal;
-    int open;
-    int close;
+    int xo, m;
 
-    Node(int opt, int o, int c){
-        optimal = opt; open = o; close = c;
-    }
-    Node(){
-        optimal = 0; open = 0; close = 0;
-    }
+    Node(int a, int b){
+        xo = a; m = b;
+    };
+    Node() {};
 };
 
 Node st[maxn*4];
 
 Node operator+(const Node& left, const Node& right){
     Node res;
-
+    res.m = max(left.m, right.m);
+    res.xo = left.xo^right.xo;
     return res;
 }
 
 void build(int id, int l, int r){
     if(l == r){
-        st[id] = Node();
+        st[id] = Node(b[l], b[l]);
         return;
     }
     int mid = (l+r)>>1;
@@ -87,7 +85,7 @@ void build(int id, int l, int r){
 
 Node query(int id, int l, int r, int u, int v){
     if(v < l || r < u){
-        return Node(0, 0, 0);
+        return Node(0, 0);
     }
     if(u <= l && r <= v){
         return st[id];
@@ -97,13 +95,49 @@ Node query(int id, int l, int r, int u, int v){
     return query(id*2, l, mid, u, v) + query(id*2+1, mid+1, r, u, v);
 }
 
+Node query(int x, int y){
+    return query(1, 1, n, x, y);
+}
+
 void solve(){
-    build(1, 1, n);
     int q;
-    cin >> q;
+    cin >> n >> q;
+    vi a(n+1);
+    b = a;
+    for(int i = 0; i < n; i++){
+        cin >> a[i+1];
+    }   
+    build(1, 1, n);
     while(q--){
-        int x, y; cin >> x >> y;
-        cout << query(1, 1, n, x, y).optimal << endl;
+        int x, y;
+        cin >> x >> y;
+        Node tmp = query(x, y);
+        if((y - x + 1) % 2 == 1){
+            if(tmp.xo == 0){
+                if(tmp.m == 0){
+                    cout << 0 << endl;
+                    // cout << "cac" << endl;
+                } else {
+                    cout << 1 << endl;
+                }
+            } else {
+                cout << -1 << endl;
+            }
+        } else {
+            if(tmp.xo == 0){
+                if(y - x + 1 == 2){
+                    if(tmp.m == 0){
+                        cout << 0 << endl;
+                    } else {
+                        cout << -1 << endl;
+                    }
+                } else {
+                    cout << 2 << endl;
+                }
+            } else {
+                cout << -1 << endl;
+            }
+        }
     }
 }
 

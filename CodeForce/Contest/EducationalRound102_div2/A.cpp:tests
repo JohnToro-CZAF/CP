@@ -1,1 +1,0 @@
-[{"test": "3\nbaba\nba\naa\naaa\naba\nab\n", "correct_answers": ["baba\naaaaaa\n-1"]}]

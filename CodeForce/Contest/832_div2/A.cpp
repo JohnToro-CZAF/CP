@@ -45,74 +45,33 @@ inline T lcm(T x, T y ){return x*y/gcd(x,y);}
 template<typename T>
 inline T findLessPower(T base, T n){if(n==1){return 0;} T temp = log(n)/log(base); if(power(base, temp) == n){return temp-1;}else{return temp;}}
 
-const int maxn = 1e6+4;
+const int maxn = 1e5 + 5;
 const ll MOD = 1e9 + 7; // 998244353
 const ll INF = 1e9;
 const char min_char = 'a';
-
-string s;
-
-struct Node {
-    int optimal;
-    int open;
-    int close;
-
-    Node(int opt, int o, int c){
-        optimal = opt; open = o; close = c;
-    }
-    Node(){
-        optimal = 0; open = 0; close = 0;
-    }
-};
-
-Node st[maxn*4];
-
-Node operator+(const Node& left, const Node& right){
-    Node res;
-
-    return res;
-}
-
-void build(int id, int l, int r){
-    if(l == r){
-        st[id] = Node();
-        return;
-    }
-    int mid = (l+r)>>1;
-    build(id*2, l, mid);
-    build(id*2+1, mid+1, r);
-
-    st[id] = st[id*2] + st[id*2+1];
-}
-
-Node query(int id, int l, int r, int u, int v){
-    if(v < l || r < u){
-        return Node(0, 0, 0);
-    }
-    if(u <= l && r <= v){
-        return st[id];
-    }
-
-    int mid = (l+r) / 2;
-    return query(id*2, l, mid, u, v) + query(id*2+1, mid+1, r, u, v);
-}
-
 void solve(){
-    build(1, 1, n);
-    int q;
-    cin >> q;
-    while(q--){
-        int x, y; cin >> x >> y;
-        cout << query(1, 1, n, x, y).optimal << endl;
+    int n;
+    cin >> n;
+    vector<ll> a(n);
+    vector<ll> neg, pos;
+    forn(i, n){
+        cin >> a[i];
+        if(a[i] <= 0){
+            neg.push_back(a[i]);
+        } else {
+            pos.push_back(a[i]);
+        }
     }
+    ll s1 = accumulate(all(neg), 0ll);
+    ll s2 = accumulate(all(pos), 0ll);
+    cout << abs(abs(s1) - abs(s2)) << endl;   
 }
 
 int main(){
     ios::sync_with_stdio(false);
     cin.tie(0);
-    cout.tie(0);
-    int c = 1;
-    // cin >> c;
+    int c;
+    cin >> c;
     while(c--){
         solve();
     }
